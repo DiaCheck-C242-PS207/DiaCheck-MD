@@ -47,11 +47,10 @@
             android:layout_marginEnd="30dp"
             android:alpha="0"
             android:hint="@string/name"
-            app:boxBackgroundColor="#F0F0F0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/messageTextView"
-            app:startIconDrawable="@drawable/ic_email"
+            app:startIconDrawable="@drawable/ic_person"
             tools:alpha="100">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -74,7 +73,6 @@
             android:layout_marginEnd="30dp"
             android:alpha="0"
             android:hint="@string/email"
-            app:boxBackgroundColor="#F0F0F0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nameTextView"
@@ -102,7 +100,6 @@
             android:alpha="0"
             android:hint="@string/password"
             app:startIconDrawable="@drawable/ic_password"
-            app:boxBackgroundColor="#F0F0F0"
             app:endIconMode="password_toggle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -139,7 +136,7 @@
             android:layout_marginTop="8dp"
             android:fontFamily="sans-serif"
             android:text="or"
-            android:textColor="@color/primary"
+            android:textColor="@color/orange"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"

@@ -3,5 +3,11 @@
     <style name="Base.Theme.DiaCheck" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">@color/orange</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white_1</item>
+        <item name="actionMenuTextColor">@color/textNight</item>
+        <item name="colorControlActivated">@color/orange</item>
+        <item name="boxBackgroundColor">@color/gray_1</item>
     </style>
 </resources>
