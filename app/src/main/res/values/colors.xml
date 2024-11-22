@@ -8,5 +8,6 @@
     <color name="black_1">#1A1927</color>
     <color name="gray_1">#F0F0F0</color>
     <color name="textLight">#202429</color>
-    <color name="textNight">#DFE3E6</color>
+    <color name="textNight">#E6DFE5</color>
+    <color name="pink">#FFEF6795</color>
 </resources>
