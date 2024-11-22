@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.capstone.diacheck.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_form"
+            app:destination="@id/navigation_form" />
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_news"
+            app:destination="@id/navigation_news" />
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_profile"
+            app:destination="@id/navigation_profile" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_form"
+        android:name="com.capstone.diacheck.ui.form.FormFragment"
+        android:label="@string/title_form"
+        tools:layout="@layout/fragment_form" >
+        <action
+            android:id="@+id/action_navigation_form_to_navigation_detail"
+            app:destination="@id/navigation_detail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_news"
+        android:name="com.capstone.diacheck.ui.news.NewsFragment"
+        android:label="@string/title_news"
+        tools:layout="@layout/fragment_news" >
+        <action
+            android:id="@+id/action_navigation_news_to_navigation_detail"
+            app:destination="@id/navigation_detail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.capstone.diacheck.ui.profile.ProfileFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_profile" >
+    </fragment>
+
+
+    <activity
+        android:id="@+id/navigation_detail"
+        android:name="com.dicoding.dicodingevent.ui.detail.DetailActivity"
+        android:label="@string/title_detail"
+        tools:layout="@layout/fragment_finished" />
+</navigation>
