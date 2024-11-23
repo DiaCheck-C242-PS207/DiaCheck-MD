@@ -1,49 +1,65 @@
 package com.capstone.diacheck.ml
 
 import android.content.Context
+import org.tensorflow.lite.Interpreter
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 
 class DiabetesClassifierHelper(
-    var threshold: Float = 0.1f,
-    var maxResults: Int = 3,
-    val modelName: String = "diabetes.tflite",
     val context: Context,
-    val classifierListener: ClassifierListener?
+    val modelName: String = "diabetes.tflite"
 ) {
-    private var diabetesClassifier: DiabetesClassifier? = null
+    private var interpreter: Interpreter? = null
 
     init {
-        setupDiabetesClassifier()
+        loadModel()
     }
 
-    private fun setupDiabetesClassifier() {
-        val optionsBuilder = DiabetesClassifier.DiabetesClassifierOptions.builder()
-            .setScoreThreshold(threshold)
-            .setMaxResults(maxResults)
-        val baseOptionsBuilder = BaseOptions.builder()
-            .setNumThreads(4)
-        optionsBuilder.setBaseOptions(baseOptionsBuilder.build())
-
+    private fun loadModel() {
         try {
-            diabetesClassifier = DiabetesClassifier.createFromFileAndOptions(
-                context,
-                modelName,
-                optionsBuilder.build()
-            )
-        } catch (e: IllegalStateException) {
-            classifierListener?.onError(context.getString(R.string.image_classifier_failed))
-            Log.e(TAG, e.message.toString())
+            val assetFileDescriptor = context.assets.openFd(modelName)
+            val inputStream = assetFileDescriptor.createInputStream()
+            val model = ByteArray(assetFileDescriptor.length.toInt())
+            inputStream.read(model)
+            inputStream.close()
+
+            val buffer = ByteBuffer.allocateDirect(model.size)
+            buffer.order(ByteOrder.nativeOrder())
+            buffer.put(model)
+
+            interpreter = Interpreter(buffer)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
-    companion object {
-        private const val TAG = "DiabetesClassifierHelper"
+    fun predict(inputData: FloatArray): FloatArray? {
+        if (interpreter == null) {
+            throw IllegalStateException("Model belum diinisialisasi.")
+        }
+
+        val inputShape = interpreter!!.getInputTensor(0).shape() // [1, 7]
+        val outputShape = interpreter!!.getOutputTensor(0).shape() // [1, 1]
+
+        val inputBuffer = ByteBuffer.allocateDirect(4 * inputShape[1])
+        inputBuffer.order(ByteOrder.nativeOrder())
+        for (value in inputData) {
+            inputBuffer.putFloat(value)
+        }
+
+        val outputBuffer = ByteBuffer.allocateDirect(4 * outputShape[1])
+        outputBuffer.order(ByteOrder.nativeOrder())
+
+        interpreter!!.run(inputBuffer, outputBuffer)
+
+        outputBuffer.rewind()
+        val results = FloatArray(outputShape[1])
+        outputBuffer.asFloatBuffer().get(results)
+
+        return results
     }
 
-    interface ClassifierListener {
-        fun onError(error: String)
-        fun onResults(
-            results: List<Classifications>?,
-            inferenceTime: Long
-        )
+    fun close() {
+        interpreter?.close()
     }
 }

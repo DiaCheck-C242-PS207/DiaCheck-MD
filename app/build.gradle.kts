@@ -50,8 +50,6 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.navigation.ui.ktx)
-    implementation(libs.tensorflow.lite.support)
-    implementation(libs.tensorflow.lite.metadata)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -73,4 +71,8 @@ dependencies {
     // UI
     implementation("androidx.exifinterface:exifinterface:1.3.6")
     implementation ("com.google.android.material:material:1.9.0")
+
+    // Tensorflowlite
+    implementation ("org.tensorflow:tensorflow-lite:2.12.0")
+
 }

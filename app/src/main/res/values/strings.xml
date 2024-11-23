@@ -15,4 +15,5 @@
     <string name="title_profile">Profile</string>
     <string name="toolbar">Theme</string>
     <string name="no_news_found">No latest news</string>
+    <string name="diacheck_error">Error</string>
 </resources>
