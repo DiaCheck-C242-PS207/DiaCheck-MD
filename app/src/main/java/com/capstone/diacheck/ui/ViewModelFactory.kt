@@ -19,7 +19,7 @@ class ViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
             modelClass.isAssignableFrom(MainViewModel::class.java) -> {
-                MainViewModel(userRepository, formRepository) as T
+                MainViewModel(userRepository) as T
             }
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
                 LoginViewModel(userRepository) as T
@@ -40,7 +40,7 @@ class ViewModelFactory(
                 synchronized(ViewModelFactory::class.java) {
                     INSTANCE = ViewModelFactory(
                         Injection.provideUserRepository(context),
-                        Injection.provideStoriesRepository(context)
+                        Injection.provideFormRepository(context)
                     )
                 }
             }

@@ -113,6 +113,7 @@
             android:layout_marginEnd="30dp"
             android:background="@drawable/shape"
             android:text="Login"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/passwordTextView" />
@@ -141,9 +142,8 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="30dp"
             android:background="@drawable/shape_google"
-            android:icon="@drawable/ic_google"
             android:text="Login with Google"
-            android:textColor="#FE5E49"
+            android:textColor="@color/orange"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/messageTextView3" />
@@ -187,5 +187,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginTop="20dp"
+            android:clickable="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/appLogo"
+            app:srcCompat="@drawable/baseline_light_mode_24"
+            tools:ignore="ContentDescription" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

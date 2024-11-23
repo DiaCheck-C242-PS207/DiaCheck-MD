@@ -14,4 +14,5 @@
     <string name="title_news">News</string>
     <string name="title_profile">Profile</string>
     <string name="toolbar">Theme</string>
+    <string name="no_news_found">No latest news</string>
 </resources>

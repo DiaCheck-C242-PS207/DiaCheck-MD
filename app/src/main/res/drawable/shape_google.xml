@@ -1,16 +1,11 @@
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="true">
-        <shape>
-            <solid android:color="#FE5E49" /> <!-- Warna saat ditekan -->
-            <stroke android:width="2dp" android:color="#FE5E49" />
-            <corners android:radius="8dp" />
-        </shape>
-    </item>
     <item>
-        <shape>
-            <solid android:color="#FFFFFF" /> <!-- Warna default -->
-            <stroke android:width="2dp" android:color="#FE5E49" />
+        <shape android:shape="rectangle">
+            <solid android:color="@color/white" />
+            <stroke
+                android:width="2dp"
+                android:color="@color/orange" />
             <corners android:radius="8dp" />
         </shape>
     </item>

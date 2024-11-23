@@ -3,7 +3,7 @@
     <item>
         <shape android:shape="rectangle">
             <!-- Warna latar belakang tombol -->
-            <solid android:color="#FE5E49" />
+            <solid android:color="@color/orange" />
 
             <!-- Warna garis luar -->
             <stroke

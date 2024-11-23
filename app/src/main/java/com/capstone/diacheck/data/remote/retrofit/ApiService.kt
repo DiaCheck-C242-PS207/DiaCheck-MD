@@ -1,6 +1,5 @@
 package com.capstone.diacheck.data.remote.retrofit
 
-import com.capstone.diacheck.data.remote.response.FormResponse
 import com.capstone.diacheck.data.remote.response.LoginResponse
 import com.capstone.diacheck.data.remote.response.NewsResponse
 import com.capstone.diacheck.data.remote.response.SignupResponse
@@ -37,8 +36,8 @@ interface ApiService {
 
 // Get History Diacheck
 
-    @GET("dia/1")
-    suspend fun getAllForm(): FormResponse
+//    @GET("dia/1")
+//    suspend fun getAllForm(): FormResponse
 
 // Upload Form
 

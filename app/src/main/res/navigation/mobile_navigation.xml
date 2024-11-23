@@ -25,9 +25,9 @@
         android:name="com.capstone.diacheck.ui.form.FormFragment"
         android:label="@string/title_form"
         tools:layout="@layout/fragment_form" >
-        <action
-            android:id="@+id/action_navigation_form_to_navigation_detail"
-            app:destination="@id/navigation_detail" />
+<!--        <action-->
+<!--            android:id="@+id/action_navigation_form_to_navigation_detail"-->
+<!--            app:destination="@id/navigation_detail" />-->
     </fragment>
 
     <fragment
@@ -35,9 +35,9 @@
         android:name="com.capstone.diacheck.ui.news.NewsFragment"
         android:label="@string/title_news"
         tools:layout="@layout/fragment_news" >
-        <action
-            android:id="@+id/action_navigation_news_to_navigation_detail"
-            app:destination="@id/navigation_detail" />
+<!--        <action-->
+<!--            android:id="@+id/action_navigation_news_to_navigation_detail"-->
+<!--            app:destination="@id/navigation_detail" />-->
     </fragment>
 
     <fragment
@@ -48,9 +48,9 @@
     </fragment>
 
 
-    <activity
-        android:id="@+id/navigation_detail"
-        android:name="com.dicoding.dicodingevent.ui.detail.DetailActivity"
-        android:label="@string/title_detail"
-        tools:layout="@layout/fragment_finished" />
+<!--    <activity-->
+<!--        android:id="@+id/navigation_detail"-->
+<!--        android:name="com.dicoding.dicodingevent.ui.detail.DetailActivity"-->
+<!--        android:label="@string/title_detail"-->
+<!--        tools:layout="@layout/fragment_finished" />-->
 </navigation>

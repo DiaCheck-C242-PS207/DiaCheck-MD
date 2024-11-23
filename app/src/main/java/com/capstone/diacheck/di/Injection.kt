@@ -14,7 +14,7 @@ object Injection {
         return UserRepository.getInstance(pref, apiService)
     }
 
-    fun provideStoriesRepository(context: Context): FormRepository {
+    fun provideFormRepository(context: Context): FormRepository {
         val pref = UserPreference.getInstance(context.dataStore)
         val apiService = ApiConfig.getApiService(pref)
         return FormRepository.getInstance(apiService)

@@ -9,17 +9,15 @@ import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.capstone.diacheck.R
+import com.capstone.diacheck.data.Result
 import com.capstone.diacheck.data.preference.UserModel
 import com.capstone.diacheck.databinding.ActivityLoginBinding
 import com.capstone.diacheck.ui.ViewModelFactory
 import com.capstone.diacheck.ui.main.MainActivity
+import com.capstone.diacheck.ui.signup.SignupActivity
 
 class LoginActivity : AppCompatActivity() {
     private val viewModel by viewModels<LoginViewModel> {
@@ -121,6 +119,10 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
             }
+        }
+        binding.createAccountText.setOnClickListener {
+            val intent = Intent(this, SignupActivity::class.java)
+            startActivity(intent)
         }
     }
 

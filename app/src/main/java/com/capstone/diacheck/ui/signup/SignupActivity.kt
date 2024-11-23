@@ -2,21 +2,24 @@ package com.capstone.diacheck.ui.signup
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AlertDialog
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.capstone.diacheck.R
 import com.capstone.diacheck.databinding.ActivitySignupBinding
+import com.capstone.diacheck.data.Result
+import com.capstone.diacheck.ui.ViewModelFactory
+import com.capstone.diacheck.ui.login.LoginActivity
 
 class SignupActivity : AppCompatActivity() {
+    private val viewModel by viewModels<SignupViewModel> {
+        ViewModelFactory.getInstance(this)
+    }
     private lateinit var binding: ActivitySignupBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -109,6 +112,10 @@ class SignupActivity : AppCompatActivity() {
                     }
                 }
             }
+        }
+        binding.haveAnAccount.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
         }
     }
 }
