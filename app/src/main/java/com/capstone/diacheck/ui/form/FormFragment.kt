@@ -1,60 +1,83 @@
 package com.capstone.diacheck.ui.form
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.*
+import androidx.fragment.app.Fragment
 import com.capstone.diacheck.R
+import com.capstone.diacheck.ml.DiabetesClassifierHelper
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [FormFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class FormFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var classifierHelper: DiabetesClassifierHelper
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_form, container, false)
+        val view = inflater.inflate(R.layout.fragment_form, container, false)
+
+        // Initialize classifier
+        classifierHelper = DiabetesClassifierHelper(requireContext())
+
+        // Initialize views
+        val etAge: EditText = view.findViewById(R.id.etAge)
+        val etBMI: EditText = view.findViewById(R.id.etBMI)
+        val etHbA1c: EditText = view.findViewById(R.id.etHbA1c)
+        val etBloodGlucose: EditText = view.findViewById(R.id.etBloodGlucose)
+        val rgGender: RadioGroup = view.findViewById(R.id.rgGender)
+        val rgHypertension: RadioGroup = view.findViewById(R.id.rgHypertension)
+        val rgHeartDisease: RadioGroup = view.findViewById(R.id.rgHeartDisease)
+        val btnSubmit: Button = view.findViewById(R.id.btnSubmit)
+        val tvResult: TextView = view.findViewById(R.id.tvResult)
+
+        btnSubmit.setOnClickListener {
+            try {
+                // Get inputs
+                val age = etAge.text.toString().toFloatOrNull() ?: throw Exception("Age is required")
+                val bmi = etBMI.text.toString().toFloatOrNull() ?: throw Exception("BMI is required")
+                val hbA1c = etHbA1c.text.toString().toFloatOrNull() ?: throw Exception("HbA1c is required")
+                val bloodGlucose = etBloodGlucose.text.toString().toFloatOrNull() ?: throw Exception("Blood glucose is required")
+
+                val gender = when (rgGender.checkedRadioButtonId) {
+                    R.id.rbMale -> 1f
+                    R.id.rbFemale -> 0f
+                    else -> throw Exception("Gender not selected")
+                }
+
+                val hypertension = when (rgHypertension.checkedRadioButtonId) {
+                    R.id.rbHypertensionYes -> 1f
+                    R.id.rbHypertensionNo -> 0f
+                    else -> throw Exception("Hypertension not selected")
+                }
+
+                val heartDisease = when (rgHeartDisease.checkedRadioButtonId) {
+                    R.id.rbHeartDiseaseYes -> 1f
+                    R.id.rbHeartDiseaseNo -> 0f
+                    else -> throw Exception("Heart disease not selected")
+                }
+
+                // Prepare input array
+                val input = floatArrayOf(age, gender, hypertension, heartDisease, bmi, hbA1c, bloodGlucose)
+
+                // Run prediction
+                val result = classifierHelper.predict(input)
+
+                // Display result in TextView as percentage
+                tvResult.text = "Prediction Result: $result"
+
+            } catch (e: Exception) {
+                Toast.makeText(context, "Please fill all fields correctly. Error: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FormFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FormFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        classifierHelper.close()
     }
 }

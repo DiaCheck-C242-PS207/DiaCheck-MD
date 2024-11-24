@@ -72,7 +72,10 @@ dependencies {
     implementation("androidx.exifinterface:exifinterface:1.3.6")
     implementation ("com.google.android.material:material:1.9.0")
 
-    // Tensorflowlite
+    // TensorFlow Lite
     implementation ("org.tensorflow:tensorflow-lite:2.12.0")
+    implementation ("org.tensorflow:tensorflow-lite-support:0.4.3")
+    implementation ("org.tensorflow:tensorflow-lite-metadata:0.3.0")
+
 
 }
