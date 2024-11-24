@@ -61,7 +61,7 @@ class FormFragment : Fragment() {
                 }
 
                 // Prepare input array
-                val input = floatArrayOf(age, gender, hypertension, heartDisease, bmi, hbA1c, bloodGlucose)
+                val input = floatArrayOf(gender, age, hypertension, heartDisease, bmi, hbA1c, bloodGlucose)
 
                 // Run prediction
                 val result = classifierHelper.predict(input)

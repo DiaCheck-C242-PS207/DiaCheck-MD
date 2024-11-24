@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -77,5 +78,6 @@ dependencies {
     implementation ("org.tensorflow:tensorflow-lite-support:0.4.3")
     implementation ("org.tensorflow:tensorflow-lite-metadata:0.3.0")
 
-
+    // Firebase
+    implementation(platform("com.google.firebase:firebase-bom:33.6.0"))
 }
