@@ -4,14 +4,26 @@ import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
+import android.view.Gravity
+import android.view.inputmethod.InputMethodManager
 import com.capstone.diacheck.R
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 class EmailEditText @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = com.google.android.material.R.attr.editTextStyle
 ) : TextInputEditText(context, attrs) {
+
+    private var parentTextInputLayout: TextInputLayout? = null
+
     init {
-        addTextChangedListener(object : TextWatcher{
+        gravity = Gravity.CENTER_VERTICAL
+        post {
+            parentTextInputLayout = this.parent?.parent as? TextInputLayout
+        }
+        addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
             }
@@ -19,9 +31,9 @@ class EmailEditText @JvmOverloads constructor(
             override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 s?.let {
                     if (android.util.Patterns.EMAIL_ADDRESS.matcher(it).matches()) {
-                        error = null
+                        parentTextInputLayout?.error = null
                     } else {
-                        setError(context.getString(R.string.email_error), null)
+                        parentTextInputLayout?.error = context.getString(R.string.email_error)
                     }
                 }
             }
@@ -31,5 +43,14 @@ class EmailEditText @JvmOverloads constructor(
             }
 
         })
+        setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                post {
+                    val imm =
+                        context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+                }
+            }
+        }
     }
 }
