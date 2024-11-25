@@ -24,11 +24,15 @@ import com.capstone.diacheck.databinding.ActivityMainBinding
 import com.capstone.diacheck.ui.ViewModelFactory
 import com.capstone.diacheck.ui.splash.SplashActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
     private val viewModel by viewModels<MainViewModel> {
         ViewModelFactory.getInstance(this)
     }
+    private lateinit var auth: FirebaseAuth
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,9 +68,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupView() {
+        auth = Firebase.auth
+        val firebaseUser = auth.currentUser
 
         viewModel.getSession().observe(this) { user ->
-            if (!user.isLogin) {
+            if (!user.isLogin || firebaseUser == null) {
                 startActivity(Intent(this, SplashActivity::class.java))
                 finish()
             }

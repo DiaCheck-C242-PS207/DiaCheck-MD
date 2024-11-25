@@ -8,6 +8,7 @@ import com.capstone.diacheck.data.remote.repository.UserRepository
 import com.capstone.diacheck.di.Injection
 import com.capstone.diacheck.ui.login.LoginViewModel
 import com.capstone.diacheck.ui.main.MainViewModel
+import com.capstone.diacheck.ui.profile.ProfileViewModel
 import com.capstone.diacheck.ui.signup.SignupViewModel
 
 class ViewModelFactory(
@@ -26,6 +27,9 @@ class ViewModelFactory(
             }
             modelClass.isAssignableFrom(SignupViewModel::class.java) -> {
                 SignupViewModel(userRepository) as T
+            }
+            modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
+                ProfileViewModel(userRepository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }

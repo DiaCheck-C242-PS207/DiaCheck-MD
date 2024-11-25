@@ -134,7 +134,7 @@
             app:layout_constraintTop_toBottomOf="@id/loginButton" />
 
         <!-- Tombol Login Google -->
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/googleButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -154,10 +154,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginRight="80dp"
+            android:layout_marginRight="120dp"
             android:fontFamily="sans-serif"
             android:text="Not registered yet? "
-            android:textSize="12sp"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/googleButton" />
@@ -170,7 +170,7 @@
             android:fontFamily="sans-serif-medium"
             android:text="Create an account!"
             android:textColor="#FE5E49"
-            android:textSize="12sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/notRegisteredText"
             app:layout_constraintTop_toBottomOf="@id/googleButton" />
@@ -186,33 +186,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--            android:id="@+id/floatingActionButton"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_margin="16dp"-->
-<!--            android:layout_marginEnd="40dp"-->
-<!--            android:layout_marginTop="20dp"-->
-<!--            android:clickable="true"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintBottom_toTopOf="@id/appLogo"-->
-<!--            app:srcCompat="@drawable/baseline_light_mode_24"-->
-<!--            tools:ignore="ContentDescription" />-->
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:layout_marginEnd="40dp"
-            android:layout_marginTop="20dp"
-            android:clickable="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/appLogo"
-            app:srcCompat="@drawable/baseline_light_mode_24"
-            tools:ignore="ContentDescription"
-            app:backgroundTint="@android:color/transparent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
