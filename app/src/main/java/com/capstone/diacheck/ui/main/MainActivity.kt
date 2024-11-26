@@ -3,6 +3,7 @@ package com.capstone.diacheck.ui.main
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
@@ -10,6 +11,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -24,15 +26,11 @@ import com.capstone.diacheck.databinding.ActivityMainBinding
 import com.capstone.diacheck.ui.ViewModelFactory
 import com.capstone.diacheck.ui.splash.SplashActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
     private val viewModel by viewModels<MainViewModel> {
         ViewModelFactory.getInstance(this)
     }
-    private lateinit var auth: FirebaseAuth
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,39 +38,31 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-
         val navView: BottomNavigationView = binding.navView
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
         val navController = navHostFragment.navController
 
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_home,
-                R.id.navigation_form,
-                R.id.navigation_news,
-                R.id.navigation_profile
-            )
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
         setupView()
-    }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_mode, menu)
-        return true
+        val logoImageView = findViewById<ImageView>(R.id.toolbar_logo)
+
+        val isDarkMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+
+        if (isDarkMode) {
+            logoImageView.setImageResource(R.drawable.logo) // Gambar untuk mode gelap
+        } else {
+            logoImageView.setImageResource(R.drawable.diacheck_white) // Gambar untuk mode terang
+        }
     }
 
     private fun setupView() {
-        auth = Firebase.auth
-        val firebaseUser = auth.currentUser
+
 
         viewModel.getSession().observe(this) { user ->
-            if (!user.isLogin || firebaseUser == null) {
+            if (!user.isLogin) {
                 startActivity(Intent(this, SplashActivity::class.java))
                 finish()
             }
@@ -87,6 +77,4 @@ class MainActivity : AppCompatActivity() {
             )
         }
     }
-
-
 }

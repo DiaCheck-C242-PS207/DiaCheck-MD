@@ -10,4 +10,6 @@
     <color name="textLight">#202429</color>
     <color name="textNight">#E6DFE5</color>
     <color name="yellow">#F4970D</color>
+    <color name="selected_color">#EF4138</color> <!-- Warna saat dipilih -->
+    <color name="unselected_color">#FE5E49</color> <!-- Warna saat tidak dipilih -->
 </resources>

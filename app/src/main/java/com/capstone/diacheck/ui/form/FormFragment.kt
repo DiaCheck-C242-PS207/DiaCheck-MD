@@ -1,83 +1,79 @@
 package com.capstone.diacheck.ui.form
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.capstone.diacheck.R
-import com.capstone.diacheck.ml.DiabetesClassifierHelper
+import com.capstone.diacheck.ui.detail.AddFormActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.progressindicator.LinearProgressIndicator
 
 class FormFragment : Fragment() {
 
-    private lateinit var classifierHelper: DiabetesClassifierHelper
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var progressBar: LinearProgressIndicator
+    private lateinit var addButton: FloatingActionButton
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_form, container, false)
 
-        // Initialize classifier
-        classifierHelper = DiabetesClassifierHelper(requireContext())
-
         // Initialize views
-        val etAge: EditText = view.findViewById(R.id.etAge)
-        val etBMI: EditText = view.findViewById(R.id.etBMI)
-        val etHbA1c: EditText = view.findViewById(R.id.etHbA1c)
-        val etBloodGlucose: EditText = view.findViewById(R.id.etBloodGlucose)
-        val rgGender: RadioGroup = view.findViewById(R.id.rgGender)
-        val rgHypertension: RadioGroup = view.findViewById(R.id.rgHypertension)
-        val rgHeartDisease: RadioGroup = view.findViewById(R.id.rgHeartDisease)
-        val btnSubmit: Button = view.findViewById(R.id.btnSubmit)
-        val tvResult: TextView = view.findViewById(R.id.tvResult)
+        recyclerView = view.findViewById(R.id.rvStory)
+        progressBar = view.findViewById(R.id.linearProgressBar)
+        addButton = view.findViewById(R.id.btn_add)
 
-        btnSubmit.setOnClickListener {
-            try {
-                // Get inputs
-                val age = etAge.text.toString().toFloatOrNull() ?: throw Exception("Age is required")
-                val bmi = etBMI.text.toString().toFloatOrNull() ?: throw Exception("BMI is required")
-                val hbA1c = etHbA1c.text.toString().toFloatOrNull() ?: throw Exception("HbA1c is required")
-                val bloodGlucose = etBloodGlucose.text.toString().toFloatOrNull() ?: throw Exception("Blood glucose is required")
-
-                val gender = when (rgGender.checkedRadioButtonId) {
-                    R.id.rbMale -> 1f
-                    R.id.rbFemale -> 0f
-                    else -> throw Exception("Gender not selected")
-                }
-
-                val hypertension = when (rgHypertension.checkedRadioButtonId) {
-                    R.id.rbHypertensionYes -> 1f
-                    R.id.rbHypertensionNo -> 0f
-                    else -> throw Exception("Hypertension not selected")
-                }
-
-                val heartDisease = when (rgHeartDisease.checkedRadioButtonId) {
-                    R.id.rbHeartDiseaseYes -> 1f
-                    R.id.rbHeartDiseaseNo -> 0f
-                    else -> throw Exception("Heart disease not selected")
-                }
-
-                // Prepare input array
-                val input = floatArrayOf(gender, age, hypertension, heartDisease, bmi, hbA1c, bloodGlucose)
-
-                // Run prediction
-                val result = classifierHelper.predict(input)
-
-                // Display result in TextView as percentage
-                tvResult.text = "Prediction Result: $result"
-
-            } catch (e: Exception) {
-                Toast.makeText(context, "Please fill all fields correctly. Error: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
-        }
         return view
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        classifierHelper.close()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.adapter = DummyAdapter() // Replace with your actual adapter
+
+        addButton.setOnClickListener {
+            val intent = Intent(requireContext(), AddFormActivity::class.java)
+            startActivity(intent)
+        }
+
+        // Simulate loading
+        showLoading(true)
+        // Simulate data load
+        recyclerView.postDelayed({
+            showLoading(false)
+        }, 2000) // Replace with actual data loading logic
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    // Dummy adapter for testing
+    inner class DummyAdapter : RecyclerView.Adapter<DummyAdapter.DummyViewHolder>() {
+        private val items = List(10) { "Item $it" }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DummyViewHolder {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(android.R.layout.simple_list_item_1, parent, false)
+            return DummyViewHolder(view)
+        }
+
+        override fun onBindViewHolder(holder: DummyViewHolder, position: Int) {
+            (holder.itemView as? android.widget.TextView)?.text = items[position]
+        }
+
+        override fun getItemCount(): Int = items.size
+
+        inner class DummyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     }
 }

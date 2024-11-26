@@ -25,9 +25,9 @@
         android:name="com.capstone.diacheck.ui.form.FormFragment"
         android:label="@string/title_form"
         tools:layout="@layout/fragment_form" >
-<!--        <action-->
-<!--            android:id="@+id/action_navigation_form_to_navigation_detail"-->
-<!--            app:destination="@id/navigation_detail" />-->
+        <action
+            android:id="@+id/action_navigation_form_to_navigation_detail"
+            app:destination="@id/navigation_detail" />
     </fragment>
 
     <fragment
@@ -48,9 +48,9 @@
     </fragment>
 
 
-<!--    <activity-->
-<!--        android:id="@+id/navigation_detail"-->
-<!--        android:name="com.dicoding.dicodingevent.ui.detail.DetailActivity"-->
-<!--        android:label="@string/title_detail"-->
-<!--        tools:layout="@layout/fragment_finished" />-->
+    <activity
+        android:id="@+id/navigation_detail"
+        android:name="com.capstone.diacheck.ui.detail.DetailActivity"
+        android:label="@string/title_detail"
+        tools:layout="@layout/activity_detail" />
 </navigation>

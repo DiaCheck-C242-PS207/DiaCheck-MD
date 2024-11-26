@@ -2,17 +2,40 @@ package com.capstone.diacheck.ui.detail
 
 import android.os.Bundle
 import android.widget.*
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.capstone.diacheck.R
+import com.capstone.diacheck.databinding.ActivityAddFormBinding
 import com.capstone.diacheck.ml.DiabetesClassifierHelper
+import com.capstone.diacheck.ui.ViewModelFactory
+import com.capstone.diacheck.ui.form.FormViewModel
+import com.capstone.diacheck.ui.main.MainViewModel
 
 class AddFormActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityAddFormBinding
+    private val viewModel by viewModels<FormViewModel> {
+        ViewModelFactory.getInstance(this)
+    }
     private lateinit var classifierHelper: DiabetesClassifierHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_form)
+        binding = ActivityAddFormBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
+        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(
+                ContextCompat.getDrawable(
+                    this@AddFormActivity,
+                    R.drawable.ic_arrow_back
+                )
+            )
+            title = getString(R.string.title_add)
+        }
         classifierHelper = DiabetesClassifierHelper(this)
 
         val etAge: EditText = findViewById(R.id.etAge)

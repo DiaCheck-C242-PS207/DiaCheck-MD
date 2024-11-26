@@ -26,7 +26,7 @@
     <string name="profile_user">Profile User</string>
     <string name="logout">Logout</string>
 
-    <!-- Form -->
+    <!-- Add Form -->
     <string name="age">Age</string>
     <string name="gender">Gender</string>
     <string name="male">Male</string>
@@ -40,4 +40,16 @@
     <string name="blood_glucose_level">"What is your blood glucose level (current blood sugar level)?"</string>
     <string name="submit">Submit</string>
     <string name="exit_app">Exit</string>
+
+    <!-- History Form -->
+    <string name="date">ddmmyyyy</string>
+    <string name="description">Deskripsi</string>
+    <string name="add_button">Add</string>
+    <string name="title_add">Predict</string>
+    <string name="title_detail">History</string>
+    <string name="no_history_found">No History Found</string>
+
+    <!-- Toolbar -->
+    <string name="toolbar_title_right">Check</string>
+    <string name="toolbar_title_left">Dia</string>
 </resources>

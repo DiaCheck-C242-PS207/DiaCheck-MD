@@ -1,43 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
+
+        <!-- Toolbar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            style="@style/ToolbarStyle"
+            app:title="@string/app_name"
+            app:titleTextColor="@android:color/white"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <!-- Input Age -->
         <TextView
+            android:id="@+id/tvAge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/age"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
             android:id="@+id/etAge"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:inputType="number" />
+            android:inputType="number"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toBottomOf="@id/tvAge"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <!-- Input Gender -->
         <TextView
+            android:id="@+id/tvGender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/gender"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toBottomOf="@id/etAge"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <RadioGroup
             android:id="@+id/rgGender"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toBottomOf="@id/tvGender"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
             <RadioButton
                 android:id="@+id/rbMale"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/male" />
+
             <RadioButton
                 android:id="@+id/rbFemale"
                 android:layout_width="wrap_content"
@@ -47,20 +83,32 @@
 
         <!-- Input Hypertension -->
         <TextView
+            android:id="@+id/tvHypertension"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/hypertension"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toBottomOf="@id/rgGender"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <RadioGroup
             android:id="@+id/rgHypertension"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toBottomOf="@id/tvHypertension"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
             <RadioButton
                 android:id="@+id/rbHypertensionYes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/yes" />
+
             <RadioButton
                 android:id="@+id/rbHypertensionNo"
                 android:layout_width="wrap_content"
@@ -70,20 +118,32 @@
 
         <!-- Input Heart Disease -->
         <TextView
+            android:id="@+id/tvHeartDisease"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/heart_disease"
-            android:textSize="16sp" />
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@id/rgHypertension"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <RadioGroup
             android:id="@+id/rgHeartDisease"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toBottomOf="@id/tvHeartDisease"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
             <RadioButton
                 android:id="@+id/rbHeartDiseaseYes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/yes" />
+
             <RadioButton
                 android:id="@+id/rbHeartDiseaseNo"
                 android:layout_width="wrap_content"
@@ -93,61 +153,110 @@
 
         <!-- Input BMI -->
         <TextView
+            android:id="@+id/tvBMI"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/bmi"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toBottomOf="@id/rgHeartDisease"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
             android:id="@+id/etBMI"
-            android:hint="BMI"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:inputType="numberDecimal" />
+            android:hint="28.7"
+            android:inputType="numberDecimal"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toBottomOf="@id/tvBMI"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <!-- Input HbA1c Level -->
         <TextView
+            android:id="@+id/tvHbA1c"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/hba1c_level"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toBottomOf="@id/etBMI"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
             android:id="@+id/etHbA1c"
-            android:hint="HbA1c Level"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:inputType="numberDecimal" />
+            android:hint="6.67"
+            android:inputType="numberDecimal"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toBottomOf="@id/tvHbA1c"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <!-- Input Blood Glucose Level -->
         <TextView
+            android:id="@+id/tvBloodGlucose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/blood_glucose_level"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toBottomOf="@id/etHbA1c"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
             android:id="@+id/etBloodGlucose"
-            android:hint="Blood Glucose Level"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:inputType="numberDecimal" />
+            android:hint="127.2"
+            android:inputType="numberDecimal"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toBottomOf="@id/tvBloodGlucose"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <!-- Submit Button -->
         <Button
             android:id="@+id/btnSubmit"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/submit"
             android:background="@drawable/shape"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp" />
+            android:text="@string/submit"
+            android:textColor="@color/white"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toBottomOf="@id/etBloodGlucose"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
+        <!-- Result Text -->
         <TextView
             android:id="@+id/tvResult"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Prediction Result: "
-            android:layout_marginTop="16dp" />
-    </LinearLayout>
+            android:text="result"
+            app:layout_constraintTop_toBottomOf="@id/btnSubmit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Loading Indicator -->
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/linearProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/tvResult"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

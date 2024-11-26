@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.capstone.diacheck.data.remote.repository.FormRepository
 import com.capstone.diacheck.data.remote.repository.UserRepository
 import com.capstone.diacheck.di.Injection
+import com.capstone.diacheck.ui.form.FormViewModel
 import com.capstone.diacheck.ui.login.LoginViewModel
 import com.capstone.diacheck.ui.main.MainViewModel
 import com.capstone.diacheck.ui.profile.ProfileViewModel
@@ -30,6 +31,9 @@ class ViewModelFactory(
             }
             modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
                 ProfileViewModel(userRepository) as T
+            }
+            modelClass.isAssignableFrom(FormViewModel::class.java) -> {
+                FormViewModel(formRepository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
