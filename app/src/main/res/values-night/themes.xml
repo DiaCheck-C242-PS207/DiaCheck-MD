@@ -6,9 +6,14 @@
         <item name="colorPrimary">@color/orange</item>
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:textColorSecondary">@color/white_1</item>
-        <item name="actionMenuTextColor">@color/textLight</item>
+        <item name="actionMenuTextColor">@color/textNight</item>
         <item name="colorControlActivated">@color/orange</item>
         <item name="boxBackgroundColor">@color/gray_1</item>
+        <item name="android:statusBarColor">@color/black_1</item>
+        <item name="android:navigationBarColor">@color/black_1</item>
+
+        <!-- Warna untuk dots indicator -->
+        <item name="tabIndicatorColor">@color/dot_selected_color</item>
     </style>
     <style name="BottomNavStyle" parent="Widget.Material3.BottomNavigationView">
         <item name="android:background">@color/black_1</item>

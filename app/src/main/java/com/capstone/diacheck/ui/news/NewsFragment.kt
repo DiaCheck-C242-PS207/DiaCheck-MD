@@ -1,60 +1,77 @@
 package com.capstone.diacheck.ui.news
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.capstone.diacheck.R
+import com.capstone.diacheck.ui.detail.AddFormActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.progressindicator.LinearProgressIndicator
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [NewsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class NewsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var progressBar: LinearProgressIndicator
+    private lateinit var addButton: FloatingActionButton
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_news, container, false)
+        val view = inflater.inflate(R.layout.fragment_form, container, false)
+
+        // Initialize views
+        recyclerView = view.findViewById(R.id.rvStory)
+        progressBar = view.findViewById(R.id.linearProgressBar)
+        addButton = view.findViewById(R.id.btn_add)
+
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment NewsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            NewsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.adapter = DummyAdapter() // Replace with your actual adapter
+
+        addButton.setOnClickListener {
+            val intent = Intent(requireContext(), AddFormActivity::class.java)
+            startActivity(intent)
+        }
+
+        // Simulate loading
+        showLoading(true)
+        // Simulate data load
+        recyclerView.postDelayed({
+            showLoading(false)
+        }, 2000) // Replace with actual data loading logic
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    // Dummy adapter for testing
+    inner class DummyAdapter : RecyclerView.Adapter<DummyAdapter.DummyViewHolder>() {
+        private val items = List(10) { "Item $it" }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DummyViewHolder {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(android.R.layout.simple_list_item_1, parent, false)
+            return DummyViewHolder(view)
+        }
+
+        override fun onBindViewHolder(holder: DummyViewHolder, position: Int) {
+            (holder.itemView as? android.widget.TextView)?.text = items[position]
+        }
+
+        override fun getItemCount(): Int = items.size
+
+        inner class DummyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     }
 }

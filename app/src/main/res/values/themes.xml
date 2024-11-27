@@ -9,6 +9,14 @@
         <item name="actionMenuTextColor">@color/textNight</item>
         <item name="colorControlActivated">@color/orange</item>
         <item name="boxBackgroundColor">@color/gray_1</item>
+        <item name="colorPrimaryVariant">@color/orange_1</item>
+
+        <!-- Warna untuk status bar dan navigasi -->
+        <item name="android:statusBarColor">@color/orange</item>
+        <item name="android:navigationBarColor">@color/orange</item>
+
+        <!-- Warna untuk dots indicator -->
+        <item name="tabIndicatorColor">@color/dot_selected_color</item>
     </style>
 
     <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
@@ -18,7 +26,7 @@
     </style>
     <style name="FloatingButtonStyle" parent="Widget.Material3.FloatingActionButton.Primary">
         <item name="backgroundTint">@color/orange</item>
-        <item name="itemIconTint">@color/item_icon_tint</item>
+        <item name="iconTint">@color/white</item>
     </style>
     <style name="BottomNavStyle" parent="Widget.Material3.BottomNavigationView">
         <item name="android:background">@color/orange</item>

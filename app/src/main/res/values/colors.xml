@@ -3,6 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="orange">#FE5E49</color>
+    <color name="orange_1">#EF4138</color>
     <color name="white_1">#FEFEFF</color>
     <color name="gray">#ACACAC</color>
     <color name="black_1">#1A1927</color>
@@ -10,6 +11,8 @@
     <color name="textLight">#202429</color>
     <color name="textNight">#E6DFE5</color>
     <color name="yellow">#F4970D</color>
-    <color name="selected_color">#EF4138</color> <!-- Warna saat dipilih -->
-    <color name="unselected_color">#FE5E49</color> <!-- Warna saat tidak dipilih -->
+    <color name="selected_color">#EF4138</color>
+    <color name="unselected_color">#FE5E49</color>
+    <color name="dot_selected_color">#EF4138</color>
+    <color name="dot_unselected_color">#FE5E49</color>
 </resources>

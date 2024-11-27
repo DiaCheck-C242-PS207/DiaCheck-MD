@@ -1,5 +1,6 @@
 package com.capstone.diacheck.ui.detail
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.*
 import androidx.activity.viewModels
@@ -17,7 +18,6 @@ class AddFormActivity : AppCompatActivity() {
     private val viewModel by viewModels<FormViewModel> {
         ViewModelFactory.getInstance(this)
     }
-    private lateinit var classifierHelper: DiabetesClassifierHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +36,9 @@ class AddFormActivity : AppCompatActivity() {
             )
             title = getString(R.string.title_add)
         }
-        classifierHelper = DiabetesClassifierHelper(this)
+        toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
 
         val etAge: EditText = findViewById(R.id.etAge)
         val etBMI: EditText = findViewById(R.id.etBMI)
@@ -46,7 +48,6 @@ class AddFormActivity : AppCompatActivity() {
         val rgHypertension: RadioGroup = findViewById(R.id.rgHypertension)
         val rgHeartDisease: RadioGroup = findViewById(R.id.rgHeartDisease)
         val btnSubmit: Button = findViewById(R.id.btnSubmit)
-        val tvResult: TextView = findViewById(R.id.tvResult)
 
         btnSubmit.setOnClickListener {
             try {
@@ -77,20 +78,13 @@ class AddFormActivity : AppCompatActivity() {
                 // Prepare input array
                 val input = floatArrayOf(gender, age, hypertension, heartDisease, bmi, hbA1c, bloodGlucose)
 
-                // Run prediction
-                val result = classifierHelper.predict(input)
+                // Pass result to DetailActivity
 
-                // Display result in TextView as percentage
-                tvResult.text = "Prediction Result: $result"
 
             } catch (e: Exception) {
                 Toast.makeText(this, "Please fill all fields correctly. Error: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
-    }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        classifierHelper.close()
     }
 }

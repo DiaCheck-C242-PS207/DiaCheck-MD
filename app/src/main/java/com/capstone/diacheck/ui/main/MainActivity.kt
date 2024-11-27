@@ -47,15 +47,6 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
         setupView()
 
-        val logoImageView = findViewById<ImageView>(R.id.toolbar_logo)
-
-        val isDarkMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-
-        if (isDarkMode) {
-            logoImageView.setImageResource(R.drawable.logo) // Gambar untuk mode gelap
-        } else {
-            logoImageView.setImageResource(R.drawable.diacheck_white) // Gambar untuk mode terang
-        }
     }
 
     private fun setupView() {
@@ -67,6 +58,17 @@ class MainActivity : AppCompatActivity() {
                 finish()
             }
         }
+
+        val logoImageView = findViewById<ImageView>(R.id.toolbar_logo)
+
+        val isDarkMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+
+        if (isDarkMode) {
+            logoImageView.setImageResource(R.drawable.diacheck_black)
+        } else {
+            logoImageView.setImageResource(R.drawable.diacheck_white)
+        }
+
         @Suppress("DEPRECATION")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.insetsController?.hide(WindowInsets.Type.statusBars())

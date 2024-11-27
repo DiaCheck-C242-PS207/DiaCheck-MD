@@ -52,4 +52,14 @@
     <!-- Toolbar -->
     <string name="toolbar_title_right">Check</string>
     <string name="toolbar_title_left">Dia</string>
+    <string name="login_with_google">Login with Google</string>
+    <string name="logo_diacheck">Logo DiaCheck</string>
+    <string name="welcome">Welcome!</string>
+    <string name="login">Login</string>
+    <string name="or">or</string>
+    <string name="not_registered_yet">Not registered yet?</string>
+    <string name="create_an_account">Create an account!</string>
+    <string name="login_here">Login Here!</string>
+    <string name="have_an_account">Have an account?</string>
+    <string name="sign_up">Sign Up</string>
 </resources>
