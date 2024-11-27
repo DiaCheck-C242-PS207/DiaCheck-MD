@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -78,5 +79,13 @@ dependencies {
     implementation ("org.tensorflow:tensorflow-lite:2.12.0")
     implementation ("org.tensorflow:tensorflow-lite-support:0.4.3")
     implementation ("org.tensorflow:tensorflow-lite-metadata:0.3.0")
+
+    // Room
+    implementation(libs.room.ktx)
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.room.compiler)
+
+    // Gson
+    implementation(libs.converter.gson)
 
 }
