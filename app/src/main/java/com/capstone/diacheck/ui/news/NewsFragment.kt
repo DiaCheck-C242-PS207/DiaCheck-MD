@@ -1,77 +1,123 @@
 package com.capstone.diacheck.ui.news
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.capstone.diacheck.R
-import com.capstone.diacheck.ui.detail.AddFormActivity
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.progressindicator.LinearProgressIndicator
+import com.capstone.diacheck.data.Result
+import com.capstone.diacheck.data.local.entity.NewsEntity
+import com.capstone.diacheck.databinding.FragmentNewsBinding
+import com.capstone.diacheck.ui.adapter.NewsAdapter
 
 class NewsFragment : Fragment() {
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var progressBar: LinearProgressIndicator
-    private lateinit var addButton: FloatingActionButton
+    private var _binding: FragmentNewsBinding? = null
+    private val binding get() = _binding!!
+    private val newsViewModel : NewsViewModel by viewModels()
+    private lateinit var newsAdapter: NewsAdapter
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_form, container, false)
-
-        // Initialize views
-        recyclerView = view.findViewById(R.id.rvStory)
-        progressBar = view.findViewById(R.id.linearProgressBar)
-        addButton = view.findViewById(R.id.btn_add)
-
-        return view
+        _binding = FragmentNewsBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupRecyclerView()
+        setupSearchView()
+        observeNews()
+    }
 
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.adapter = DummyAdapter() // Replace with your actual adapter
-
-        addButton.setOnClickListener {
-            val intent = Intent(requireContext(), AddFormActivity::class.java)
-            startActivity(intent)
+    private fun setupRecyclerView() {
+        newsAdapter = NewsAdapter { navigateToDetailNews(it) }
+        binding.rvNews.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = newsAdapter
         }
+    }
 
-        // Simulate loading
-        showLoading(true)
-        // Simulate data load
-        recyclerView.postDelayed({
-            showLoading(false)
-        }, 2000) // Replace with actual data loading logic
+    private fun setupSearchView() {
+        binding.searchView.apply {
+            visibility = View.VISIBLE
+            setOnQueryTextListener(object :
+                androidx.appcompat.widget.SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    observeSearchNews(query.orEmpty())
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    observeSearchNews(newText.orEmpty())
+                    return true
+                }
+            })
+        }
+    }
+
+    private fun observeNews() {
+        newsViewModel.findNews().observe(viewLifecycleOwner) { result ->
+            handleResult(result)
+        }
+    }
+
+    private fun observeSearchNews(query: String) {
+        newsViewModel.searchNews(query).observe(viewLifecycleOwner) { result ->
+            handleResult(result)
+        }
+    }
+
+    private fun handleResult(result: Result<List<NewsEntity>>) {
+        when (result) {
+            is Result.Loading -> showLoading(true)
+            is Result.Success -> {
+                showLoading(false)
+                updateNewsList(result.data)
+            }
+
+            is Result.Error -> showError()
+        }
     }
 
     private fun showLoading(isLoading: Boolean) {
-        progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.linearProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.rvNews.visibility = if (isLoading) View.GONE else View.VISIBLE
     }
 
-    // Dummy adapter for testing
-    inner class DummyAdapter : RecyclerView.Adapter<DummyAdapter.DummyViewHolder>() {
-        private val items = List(10) { "Item $it" }
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DummyViewHolder {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(android.R.layout.simple_list_item_1, parent, false)
-            return DummyViewHolder(view)
+    private fun updateNewsList(newsData: List<NewsEntity>) {
+        if (newsData.isEmpty()) {
+            binding.tvNoEvent.visibility = View.VISIBLE
+            binding.rvNews.visibility = View.GONE
+        } else {
+            binding.tvNoEvent.visibility = View.GONE
+            binding.rvNews.visibility = View.VISIBLE
+            newsAdapter.submitList(newsData)
         }
+    }
 
-        override fun onBindViewHolder(holder: DummyViewHolder, position: Int) {
-            (holder.itemView as? android.widget.TextView)?.text = items[position]
+    private fun showError() {
+        binding.linearProgressBar.visibility = View.GONE
+        binding.rvNews.visibility = View.GONE
+        binding.tvNoEvent.visibility = View.VISIBLE
+    }
+
+    private fun navigateToDetailNews(news: NewsEntity) {
+        val intent = Intent(requireContext(), DetailNewsActivity::class.java).apply {
+            putExtra(DetailNewsActivity.EXTRA_NEWS_ID, news.id.toString())
         }
+        startActivity(intent)
+    }
 
-        override fun getItemCount(): Int = items.size
-
-        inner class DummyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

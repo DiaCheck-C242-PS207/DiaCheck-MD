@@ -1,5 +1,6 @@
 package com.capstone.diacheck.data.remote.retrofit
 
+import com.capstone.diacheck.data.remote.response.DetailNewsResponse
 import com.capstone.diacheck.data.remote.response.LoginResponse
 import com.capstone.diacheck.data.remote.response.NewsResponse
 import com.capstone.diacheck.data.remote.response.SignupResponse
@@ -12,6 +13,7 @@ import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Path
 
 interface ApiService {
     @FormUrlEncoded
@@ -31,8 +33,11 @@ interface ApiService {
 
 // Get Artikel or News
 
-    @GET("news")
+    @GET("articles")
     suspend fun getNews(): NewsResponse
+
+    @GET("articles/{id}")
+    suspend fun getDetailNews(@Path("id_articles") newsId: String): DetailNewsResponse
 
 // Get History Diacheck
 

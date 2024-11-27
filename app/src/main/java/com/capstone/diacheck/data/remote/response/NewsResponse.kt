@@ -1,12 +1,11 @@
 package com.capstone.diacheck.data.remote.response
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
- data class NewsResponse (
+data class NewsResponse(
 
-//    @field:SerializedName("listStory")
-//    val listStory: List<ListStoryItem?>? = null,
+    @field:SerializedName("listStory")
+    val listNews: List<ListNewsItem?>? = null,
 
     @field:SerializedName("error")
     val error: Boolean? = null,
@@ -15,28 +14,21 @@ import com.google.gson.annotations.SerializedName
     val message: String? = null
 )
 
-// Example
-//@Parcelize
-//data class ListStoryItem(
-//
-//    @field:SerializedName("photoUrl")
-//    val photoUrl: String? = null,
-//
-//    @field:SerializedName("createdAt")
-//    val createdAt: String? = null,
-//
-//    @field:SerializedName("name")
-//    val name: String? = null,
-//
-//    @field:SerializedName("description")
-//    val description: String? = null,
-//
-//    @field:SerializedName("lon")
-//    val lon: Float? = null,
-//
-//    @field:SerializedName("id")
-//    val id: String? = null,
-//
-//    @field:SerializedName("lat")
-//    val lat: Float? = null
-//): Parcelable
+
+data class ListNewsItem(
+
+    @field:SerializedName("id_article")
+    val id: Int,
+
+    @field:SerializedName("thumbnail")
+    val thumbnail: String,
+
+    @field:SerializedName("title")
+    val title: String,
+
+    @field:SerializedName("body")
+    val body: String,
+
+    @field:SerializedName("update_at")
+    val date: String
+)
