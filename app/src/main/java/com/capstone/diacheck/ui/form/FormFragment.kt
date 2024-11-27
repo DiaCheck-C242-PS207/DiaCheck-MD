@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.capstone.diacheck.R
+import com.capstone.diacheck.ui.adapter.FormAdapter
 import com.capstone.diacheck.ui.detail.AddFormActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.progressindicator.LinearProgressIndicator
@@ -39,7 +40,7 @@ class FormFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.adapter = DummyAdapter() // Replace with your actual adapter
+        recyclerView.adapter = FormAdapter()
 
         addButton.setOnClickListener {
             val intent = Intent(requireContext(), AddFormActivity::class.java)
@@ -58,22 +59,4 @@ class FormFragment : Fragment() {
         progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    // Dummy adapter for testing
-    inner class DummyAdapter : RecyclerView.Adapter<DummyAdapter.DummyViewHolder>() {
-        private val items = List(10) { "Item $it" }
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DummyViewHolder {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(android.R.layout.simple_list_item_1, parent, false)
-            return DummyViewHolder(view)
-        }
-
-        override fun onBindViewHolder(holder: DummyViewHolder, position: Int) {
-            (holder.itemView as? android.widget.TextView)?.text = items[position]
-        }
-
-        override fun getItemCount(): Int = items.size
-
-        inner class DummyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-    }
 }
