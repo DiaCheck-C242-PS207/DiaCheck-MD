@@ -79,7 +79,10 @@ class AddFormActivity : AppCompatActivity() {
                 val input = floatArrayOf(gender, age, hypertension, heartDisease, bmi, hbA1c, bloodGlucose)
 
                 // Pass result to DetailActivity
-
+                val intent = Intent(this, DetailActivity::class.java).apply {
+                    putExtra("PREDICTION_INPUT", input)
+                }
+                startActivity(intent)
 
             } catch (e: Exception) {
                 Toast.makeText(this, "Please fill all fields correctly. Error: ${e.message}", Toast.LENGTH_SHORT).show()

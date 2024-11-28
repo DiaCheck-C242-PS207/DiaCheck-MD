@@ -20,12 +20,12 @@ interface NewsDao {
     suspend fun deleteNews()
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertNews(news: List<NewsEntity>)
+    suspend fun insertNews(news: kotlin.collections.List<com.capstone.diacheck.data.local.entity.NewsEntity>)
 
     @Update
     suspend fun updateNews(news: NewsEntity)
 
-    @Query("SELECT * FROM articles WHERE id = :newsId")
+    @Query("SELECT * FROM articles WHERE id_article = :newsId")
     fun getNewsById(newsId: String): LiveData<NewsEntity>
 
 }

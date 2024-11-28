@@ -7,13 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.capstone.diacheck.R
+import com.capstone.diacheck.databinding.FragmentFormBinding
+import com.capstone.diacheck.ui.ViewModelFactory
 import com.capstone.diacheck.ui.adapter.FormAdapter
 import com.capstone.diacheck.ui.detail.AddFormActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.progressindicator.LinearProgressIndicator
+import java.text.Normalizer.Form
 
 class FormFragment : Fragment() {
 
@@ -40,7 +44,6 @@ class FormFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.adapter = FormAdapter()
 
         addButton.setOnClickListener {
             val intent = Intent(requireContext(), AddFormActivity::class.java)

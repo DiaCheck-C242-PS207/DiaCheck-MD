@@ -24,28 +24,30 @@ class NewsRepository private constructor(
     private val _detailNews = MutableLiveData<Result<News>>()
 
     fun getNews(): LiveData<Result<List<NewsEntity>>> = liveData {
-        emit(Result.Loading)
-        try {
-            val response = apiService.getNews()
-            val listNews = response.listNews
-            val newsList = listNews.map { news ->
-                NewsEntity(
-                    news.id,
-                    news.thumbnail,
-                    news.title,
-                    news.body,
-                    news.date
-                )
-            }
-            newsDao.deleteNews()
-            newsDao.insertNews(newsList)
-        } catch (e: Exception) {
-            emit(Result.Error(e.message.toString()))
-        }
-
-        val localData: LiveData<Result<List<NewsEntity>>> =
-            newsDao.getNews().map { Result.Success(it) }
-        emitSource(localData)
+//        emit(Result.Loading)
+//        try {
+//            val response = apiService.getNews()
+//            val listNews = response.listNews
+//            val newsList = listNews?.map { news ->
+//                news?.let {
+//                    NewsEntity(
+//                        news.id,
+//                        news.thumbnail,
+//                        news.title,
+//                        news.body,
+//                        news.date
+//                    )
+//                }
+//            }
+//            newsDao.deleteNews()
+//            newsDao.insertNews(newsList)
+//        } catch (e: Exception) {
+//            emit(Result.Error(e.message.toString()))
+//        }
+//
+//        val localData: LiveData<Result<List<NewsEntity>>> =
+//            newsDao.getNews().map { Result.Success(it) }
+//        emitSource(localData)
     }
 
     fun searchNews(query: String, isNews: Boolean): LiveData<Result<List<NewsEntity>>> {
@@ -69,27 +71,27 @@ class NewsRepository private constructor(
 
     @Suppress("KotlinDeprecation")
     fun getDetailNews(newsId: String): LiveData<Result<NewsEntity>> = liveData {
-        emit(Result.Loading)
-        try {
-            val response = apiService.getDetailNews(newsId)
-            val newsDetail = response.news
-            newsDetail?.let { news ->
-                val newsEntity = NewsEntity(
-                    news.id,
-                    news.thumbnail,
-                    news.title,
-                    news.body,
-                    news.date
-                )
-                newsDao.insertNews(listOf(newsEntity))
-            }
-        } catch (e: Exception) {
-            emit(Result.Error(e.message.toString()))
-        }
-        val localData = newsDao.getNewsById(newsId).map { newsEntity ->
-            Result.Success(newsEntity) as Result<NewsEntity>
-        }
-        emitSource(localData)
+//        emit(Result.Loading)
+//        try {
+//            val response = apiService.getDetailNews(newsId)
+//            val newsDetail = response.news
+//            newsDetail?.let { news ->
+//                val newsEntity = NewsEntity(
+//                    news.id,
+//                    news.thumbnail,
+//                    news.title,
+//                    news.body,
+//                    news.date
+//                )
+//                newsDao.insertNews(listOf(newsEntity))
+//            }
+//        } catch (e: Exception) {
+//            emit(Result.Error(e.message.toString()))
+//        }
+//        val localData = newsDao.getNewsById(newsId).map { newsEntity ->
+//            Result.Success(newsEntity) as Result<NewsEntity>
+//        }
+//        emitSource(localData)
     }
 
     companion object {
