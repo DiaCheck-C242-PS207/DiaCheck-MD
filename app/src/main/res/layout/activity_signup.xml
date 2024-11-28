@@ -79,7 +79,7 @@
             app:startIconDrawable="@drawable/ic_email"
             tools:alpha="100">
 
-            <com.capstone.diacheck.ui.custom.EmailEditText
+            <com.project.diacheck.ui.custom.EmailEditText
                 android:id="@+id/emailEditTextLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -106,7 +106,7 @@
             app:layout_constraintTop_toBottomOf="@id/emailTextView"
             tools:alpha="100">
 
-            <com.capstone.diacheck.ui.custom.PasswordEditText
+            <com.project.diacheck.ui.custom.PasswordEditText
                 android:id="@+id/passwordEditTextLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.capstone.diacheck"
+    namespace = "com.project.diacheck"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.capstone.diacheck"
+        applicationId = "com.project.diacheck"
         minSdk = 23
         targetSdk = 34
         versionCode = 1
