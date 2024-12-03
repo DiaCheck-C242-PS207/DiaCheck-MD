@@ -38,23 +38,32 @@ class LoginActivity : AppCompatActivity() {
     private fun playAnimation() {
 
         val title = ObjectAnimator.ofFloat(binding.messageTextView, View.ALPHA, 1f).setDuration(100)
-        val message2 = ObjectAnimator.ofFloat(binding.messageTextView2, View.ALPHA, 1f).setDuration(100)
-        val message3 = ObjectAnimator.ofFloat(binding.messageTextView3, View.ALPHA, 1f).setDuration(100)
-        val message4 = ObjectAnimator.ofFloat(binding.notRegisteredText, View.ALPHA, 1f).setDuration(100)
-        val message5 = ObjectAnimator.ofFloat(binding.createAccountText, View.ALPHA, 1f).setDuration(100)
+        val message2 =
+            ObjectAnimator.ofFloat(binding.messageTextView2, View.ALPHA, 1f).setDuration(100)
+        val message3 =
+            ObjectAnimator.ofFloat(binding.messageTextView3, View.ALPHA, 1f).setDuration(100)
+        val message4 =
+            ObjectAnimator.ofFloat(binding.notRegisteredText, View.ALPHA, 1f).setDuration(100)
+        val message5 =
+            ObjectAnimator.ofFloat(binding.createAccountText, View.ALPHA, 1f).setDuration(100)
         val register = ObjectAnimator.ofFloat(binding.googleButton, View.ALPHA, 1f).setDuration(100)
         val login = ObjectAnimator.ofFloat(binding.loginButton, View.ALPHA, 1f).setDuration(100)
-        val emailText = ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 1f).setDuration(100)
-        val emailEdit = ObjectAnimator.ofFloat(binding.emailEditTextLayout, View.ALPHA, 1f).setDuration(100)
-        val passwordText = ObjectAnimator.ofFloat(binding.passwordTextView, View.ALPHA, 1f).setDuration(100)
-        val passwordEdit = ObjectAnimator.ofFloat(binding.passwordEditTextLayout, View.ALPHA, 1f).setDuration(100)
+        val emailText =
+            ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 1f).setDuration(100)
+        val emailEdit =
+            ObjectAnimator.ofFloat(binding.emailEditTextLayout, View.ALPHA, 1f).setDuration(100)
+        val passwordText =
+            ObjectAnimator.ofFloat(binding.passwordTextView, View.ALPHA, 1f).setDuration(100)
+        val passwordEdit =
+            ObjectAnimator.ofFloat(binding.passwordEditTextLayout, View.ALPHA, 1f).setDuration(100)
 
         val together = AnimatorSet().apply {
             playTogether(login, register)
         }
 
         AnimatorSet().apply {
-            playSequentially(title,
+            playSequentially(
+                title,
                 message2,
                 message3,
                 message4,
@@ -93,24 +102,42 @@ class LoginActivity : AppCompatActivity() {
                         binding.linearProgressBar.visibility = View.GONE
                         Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
                     }
+
                     is Result.Loading -> {
                         binding.linearProgressBar.visibility = View.VISIBLE
                     }
+
                     is Result.Success -> {
                         binding.linearProgressBar.visibility = View.GONE
                         if (result.data.error == true) {
                             Toast.makeText(this, result.data.message, Toast.LENGTH_SHORT).show()
                         } else {
-                            result.data.loginResult?.let {
-                                Toast.makeText(this,
-                                    getString(R.string.login_success), Toast.LENGTH_SHORT).show()
-                                viewModel.saveSession(UserModel(email, it.token, true))
+                            result.data.loginResult?.let { loginResult ->
+                                Toast.makeText(
+                                    this,
+                                    getString(R.string.login_success),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+
+                                // Nyimpan session
+                                val userModel = UserModel(
+                                    name = loginResult.name,
+                                    email = loginResult.email,
+                                    token = loginResult.token,
+                                    isLogin = true,
+                                    id_users = loginResult.id_users,
+                                    avatar = loginResult.avatar
+                                )
+                                viewModel.saveSession(userModel)
+
                                 val intent = Intent(this, MainActivity::class.java)
-                                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                intent.flags =
+                                    Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                                 startActivity(intent)
                                 finish()
                             }
                         }
+
                     }
                 }
             }

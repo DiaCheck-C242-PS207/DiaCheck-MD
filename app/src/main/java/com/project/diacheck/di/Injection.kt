@@ -1,10 +1,12 @@
 package com.project.diacheck.di
 
 import android.content.Context
-import com.project.diacheck.data.remote.repository.UserRepository
+import com.project.diacheck.data.local.room.DiacheckDatabase
 import com.project.diacheck.data.preference.UserPreference
 import com.project.diacheck.data.preference.dataStore
 import com.project.diacheck.data.remote.repository.FormRepository
+import com.project.diacheck.data.remote.repository.NewsRepository
+import com.project.diacheck.data.remote.repository.UserRepository
 import com.project.diacheck.data.remote.retrofit.ApiConfig
 
 object Injection {
@@ -18,5 +20,13 @@ object Injection {
         val pref = UserPreference.getInstance(context.dataStore)
         val apiService = ApiConfig.getApiService(pref)
         return FormRepository.getInstance(apiService)
+    }
+
+    fun provideNewsRepository(context: Context): NewsRepository {
+        val database = DiacheckDatabase.getInstance(context)
+        val newsDao = database.newsDao()
+        val pref = UserPreference.getInstance(context.dataStore)
+        val apiService = ApiConfig.getApiService(pref)
+        return NewsRepository.getInstance(apiService, newsDao)
     }
 }

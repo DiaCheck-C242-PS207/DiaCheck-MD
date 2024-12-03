@@ -7,9 +7,9 @@ data class DetailNewsResponse(
 )
 
 data class News(
-    val id: Int? = null,
-    val thumbnail: String? = null,
-    val title: String? = null,
-    val body: String? = null,
-    val date: String? = null
+    val id: Int,
+    val thumbnail: String,
+    val title: String,
+    val body: String,
+    val date: String
 )

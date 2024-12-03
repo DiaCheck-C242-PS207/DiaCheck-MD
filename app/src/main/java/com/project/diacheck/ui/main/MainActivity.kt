@@ -11,11 +11,11 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.project.diacheck.R
 import com.project.diacheck.databinding.ActivityMainBinding
 import com.project.diacheck.ui.ViewModelFactory
 import com.project.diacheck.ui.splash.SplashActivity
-import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
     private val viewModel by viewModels<MainViewModel> {
@@ -41,7 +41,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupView() {
 
-
         viewModel.getSession().observe(this) { user ->
             if (!user.isLogin) {
                 startActivity(Intent(this, SplashActivity::class.java))
@@ -51,7 +50,8 @@ class MainActivity : AppCompatActivity() {
 
         val logoImageView = findViewById<ImageView>(R.id.toolbar_logo)
 
-        val isDarkMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+        val isDarkMode =
+            resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
         if (isDarkMode) {
             logoImageView.setImageResource(R.drawable.diacheck_black)

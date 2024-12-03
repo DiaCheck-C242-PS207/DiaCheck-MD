@@ -1,19 +1,21 @@
 package com.project.diacheck.data.remote.retrofit
 
+import com.project.diacheck.data.local.entity.HistoryEntity
+import com.project.diacheck.data.remote.response.DetailHistoriesResponse
 import com.project.diacheck.data.remote.response.DetailNewsResponse
+import com.project.diacheck.data.remote.response.ListFormItem
 import com.project.diacheck.data.remote.response.LoginResponse
 import com.project.diacheck.data.remote.response.NewsResponse
 import com.project.diacheck.data.remote.response.SignupResponse
-import com.project.diacheck.data.remote.response.UploadFormResponse
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
+import com.project.diacheck.data.remote.response.SubmitFormItem
+import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
-import retrofit2.http.Multipart
 import retrofit2.http.POST
-import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
     @FormUrlEncoded
@@ -36,6 +38,12 @@ interface ApiService {
     @GET("articles")
     suspend fun getNews(): NewsResponse
 
+    @GET("articles")
+    suspend fun searchNews(
+        @Query("q") query: String,
+        @Query("active") active: Int = 0
+    ): NewsResponse
+
     @GET("articles/{id}")
     suspend fun getDetailNews(@Path("id_articles") newsId: String): DetailNewsResponse
 
@@ -46,10 +54,15 @@ interface ApiService {
 
 // Upload Form
 
-    @Multipart
-    @POST("dia")
-    suspend fun uploadForm(
-        @Part file: MultipartBody.Part,
-        @Part("description") description: RequestBody,
-    ): UploadFormResponse
+    @POST("history/submit")
+    suspend fun submitHistory(@Body formItem: SubmitFormItem): Response<ListFormItem>
+
+    @GET("histories")
+    suspend fun getFormById(
+        @Query("user_id") userId: String
+    ): List<HistoryEntity>
+
+    @GET("histories/{id}")
+    suspend fun getHistoryById(@Path("id") id: Int): Response<DetailHistoriesResponse>
+
 }

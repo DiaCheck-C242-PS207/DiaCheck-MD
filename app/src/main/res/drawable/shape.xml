@@ -1,4 +1,3 @@
-
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="rectangle">
@@ -6,9 +5,7 @@
             <solid android:color="@color/orange" />
 
             <!-- Warna garis luar -->
-            <stroke
-                android:width="2dp"
-                android:color="#FE5E49" />
+            <stroke android:width="2dp" android:color="#FE5E49" />
 
             <!-- Radius sudut -->
             <corners android:radius="8dp" />

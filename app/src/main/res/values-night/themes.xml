@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.DiaCheck" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
@@ -15,14 +15,17 @@
         <!-- Warna untuk dots indicator -->
         <item name="tabIndicatorColor">@color/dot_selected_color</item>
     </style>
+
     <style name="BottomNavStyle" parent="Widget.Material3.BottomNavigationView">
         <item name="android:background">@color/black_1</item>
         <item name="itemIconTint">@color/white</item>
         <item name="itemTextColor">@color/white</item>
     </style>
+
     <style name="ToolbarStyle" parent="Widget.Material3.Toolbar">
         <item name="android:background">@color/black_1</item>
     </style>
+
     <style name="ToolbarStyleTitle" parent="Widget.AppCompat.TextView">
         <item name="android:textColor">@color/orange</item>
     </style>

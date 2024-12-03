@@ -62,4 +62,7 @@
     <string name="login_here">Login Here!</string>
     <string name="have_an_account">Have an account?</string>
     <string name="sign_up">Sign Up</string>
+    <string name="title_detail_news">Detail News</string>
+    <string name="title_result">Result</string>
+    <string name="detail_news">News</string>
 </resources>

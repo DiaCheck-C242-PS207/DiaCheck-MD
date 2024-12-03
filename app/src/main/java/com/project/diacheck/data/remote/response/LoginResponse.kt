@@ -16,11 +16,17 @@ data class LoginResponse(
 
 data class LoginResult(
 
+    @field:SerializedName("email")
+    val email: String,
+
+    @field:SerializedName("avatar")
+    val avatar: String,
+
     @field:SerializedName("name")
     val name: String,
 
-    @field:SerializedName("userId")
-    val userId: String,
+    @field:SerializedName("id_users")
+    val id_users: Int,
 
     @field:SerializedName("token")
     val token: String

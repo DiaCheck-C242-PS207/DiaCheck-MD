@@ -6,9 +6,9 @@ import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.inputmethod.InputMethodManager
-import com.project.diacheck.R
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.project.diacheck.R
 
 class PasswordEditText @JvmOverloads constructor(
     context: Context,

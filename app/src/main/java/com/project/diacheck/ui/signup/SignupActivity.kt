@@ -11,8 +11,8 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.project.diacheck.databinding.ActivitySignupBinding
 import com.project.diacheck.data.Result
+import com.project.diacheck.databinding.ActivitySignupBinding
 import com.project.diacheck.ui.ViewModelFactory
 import com.project.diacheck.ui.login.LoginActivity
 
@@ -37,20 +37,28 @@ class SignupActivity : AppCompatActivity() {
         val title = ObjectAnimator.ofFloat(binding.messageTextView, View.ALPHA, 1f).setDuration(100)
         val nameText = ObjectAnimator.ofFloat(binding.nameTextView, View.ALPHA, 1f).setDuration(100)
         val login = ObjectAnimator.ofFloat(binding.signupButton, View.ALPHA, 1f).setDuration(100)
-        val message3 = ObjectAnimator.ofFloat(binding.notRegisteredText, View.ALPHA, 1f).setDuration(100)
-        val message4 = ObjectAnimator.ofFloat(binding.haveAnAccount, View.ALPHA, 1f).setDuration(100)
-        val emailText = ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 1f).setDuration(100)
-        val nameEditTextLayout = ObjectAnimator.ofFloat(binding.nameEditTextLayout, View.ALPHA, 1f).setDuration(100)
-        val emailEdit = ObjectAnimator.ofFloat(binding.emailEditTextLayout, View.ALPHA, 1f).setDuration(100)
-        val passwordText = ObjectAnimator.ofFloat(binding.passwordTextView, View.ALPHA, 1f).setDuration(100)
-        val passwordEdit = ObjectAnimator.ofFloat(binding.passwordEditTextLayout, View.ALPHA, 1f).setDuration(100)
+        val message3 =
+            ObjectAnimator.ofFloat(binding.notRegisteredText, View.ALPHA, 1f).setDuration(100)
+        val message4 =
+            ObjectAnimator.ofFloat(binding.haveAnAccount, View.ALPHA, 1f).setDuration(100)
+        val emailText =
+            ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 1f).setDuration(100)
+        val nameEditTextLayout =
+            ObjectAnimator.ofFloat(binding.nameEditTextLayout, View.ALPHA, 1f).setDuration(100)
+        val emailEdit =
+            ObjectAnimator.ofFloat(binding.emailEditTextLayout, View.ALPHA, 1f).setDuration(100)
+        val passwordText =
+            ObjectAnimator.ofFloat(binding.passwordTextView, View.ALPHA, 1f).setDuration(100)
+        val passwordEdit =
+            ObjectAnimator.ofFloat(binding.passwordEditTextLayout, View.ALPHA, 1f).setDuration(100)
 
         val together = AnimatorSet().apply {
             playTogether(login)
         }
 
         AnimatorSet().apply {
-            playSequentially(title,
+            playSequentially(
+                title,
                 message3,
                 message4,
                 nameText,
@@ -90,9 +98,11 @@ class SignupActivity : AppCompatActivity() {
                         binding.linearProgressBar.visibility = View.GONE
                         Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
                     }
+
                     is Result.Loading -> {
                         binding.linearProgressBar.visibility = View.VISIBLE
                     }
+
                     is Result.Success -> {
                         binding.linearProgressBar.visibility = View.GONE
                         if (result.data.error == true) {

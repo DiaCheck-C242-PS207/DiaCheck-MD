@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.project.diacheck.R
 import com.project.diacheck.data.local.entity.NewsEntity
+//import com.project.diacheck.data.local.entity.NewsEntity
 import com.project.diacheck.databinding.ItemNewsBinding
 
 class NewsAdapter(

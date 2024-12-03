@@ -3,13 +3,13 @@ package com.project.diacheck.data.remote.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
+import com.google.gson.Gson
 import com.project.diacheck.data.Result
 import com.project.diacheck.data.preference.UserModel
 import com.project.diacheck.data.preference.UserPreference
 import com.project.diacheck.data.remote.response.LoginResponse
 import com.project.diacheck.data.remote.response.SignupResponse
 import com.project.diacheck.data.remote.retrofit.ApiService
-import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import retrofit2.HttpException
 
@@ -18,27 +18,28 @@ class UserRepository private constructor(
     private val apiService: ApiService
 ) {
 
-    fun signup(name: String, email: String, password: String): LiveData<Result<SignupResponse>> = liveData {
-        emit(Result.Loading)
-        try {
-            val response = apiService.register(name, email, password)
-            emit(Result.Success(response))
-        } catch (e: HttpException) {
-            Log.e("postRegister", "HTTP Exception: ${e.message}")
+    fun signup(name: String, email: String, password: String): LiveData<Result<SignupResponse>> =
+        liveData {
+            emit(Result.Loading)
             try {
-                val errorResponse = e.response()?.errorBody()?.string()
-                val gson = Gson()
-                val parsedError = gson.fromJson(errorResponse, SignupResponse::class.java)
-                emit(Result.Success(parsedError))
-            } catch (parseException: Exception) {
-                Log.e("postRegister", "Error parsing response: ${parseException.message}")
-                emit(Result.Error("Error parsing HTTP exception response"))
+                val response = apiService.register(name, email, password)
+                emit(Result.Success(response))
+            } catch (e: HttpException) {
+                Log.e("postRegister", "HTTP Exception: ${e.message}")
+                try {
+                    val errorResponse = e.response()?.errorBody()?.string()
+                    val gson = Gson()
+                    val parsedError = gson.fromJson(errorResponse, SignupResponse::class.java)
+                    emit(Result.Success(parsedError))
+                } catch (parseException: Exception) {
+                    Log.e("postRegister", "Error parsing response: ${parseException.message}")
+                    emit(Result.Error("Error parsing HTTP exception response"))
+                }
+            } catch (e: Exception) {
+                Log.e("postRegister", "General Exception: ${e.message}")
+                emit(Result.Error(e.message.toString()))
             }
-        } catch (e: Exception) {
-            Log.e("postRegister", "General Exception: ${e.message}")
-            emit(Result.Error(e.message.toString()))
         }
-    }
 
     fun login(email: String, password: String): LiveData<Result<LoginResponse>> = liveData {
         emit(Result.Loading)

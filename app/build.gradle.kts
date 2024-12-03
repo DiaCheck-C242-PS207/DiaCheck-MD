@@ -71,14 +71,14 @@ dependencies {
 
     // UI
     implementation("androidx.exifinterface:exifinterface:1.3.6")
-    implementation ("com.google.android.material:material:1.9.0")
-    implementation ("androidx.viewpager2:viewpager2:1.0.0")
+    implementation("com.google.android.material:material:1.9.0")
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
 
 
     // TensorFlow Lite
-    implementation ("org.tensorflow:tensorflow-lite:2.12.0")
-    implementation ("org.tensorflow:tensorflow-lite-support:0.4.3")
-    implementation ("org.tensorflow:tensorflow-lite-metadata:0.3.0")
+    implementation("org.tensorflow:tensorflow-lite:2.12.0")
+    implementation("org.tensorflow:tensorflow-lite-support:0.4.3")
+    implementation("org.tensorflow:tensorflow-lite-metadata:0.3.0")
 
     // Room
     implementation(libs.room.ktx)

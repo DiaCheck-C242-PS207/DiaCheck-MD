@@ -29,7 +29,7 @@
             android:layout_marginStart="25dp"
             android:textSize="30sp"
             android:textStyle="bold"
-            android:text="@string/toolbar_title_left"/>
+            android:text="@string/toolbar_title_left" />
 
         <TextView
             android:id="@+id/toolbar_title_right"
@@ -38,7 +38,7 @@
             android:textSize="30sp"
             android:textStyle="bold"
             android:textColor="@color/white"
-            android:text="@string/toolbar_title_right"/>
+            android:text="@string/toolbar_title_right" />
 
     </androidx.appcompat.widget.Toolbar>
 

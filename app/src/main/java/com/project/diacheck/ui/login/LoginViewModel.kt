@@ -2,8 +2,8 @@ package com.project.diacheck.ui.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.project.diacheck.data.remote.repository.UserRepository
 import com.project.diacheck.data.preference.UserModel
+import com.project.diacheck.data.remote.repository.UserRepository
 import kotlinx.coroutines.launch
 
 class LoginViewModel(private val repository: UserRepository) : ViewModel() {
@@ -12,5 +12,6 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
             repository.saveSession(user)
         }
     }
+
     fun login(email: String, password: String) = repository.login(email, password)
 }

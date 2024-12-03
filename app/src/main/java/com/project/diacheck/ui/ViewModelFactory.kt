@@ -4,17 +4,20 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.project.diacheck.data.remote.repository.FormRepository
+import com.project.diacheck.data.remote.repository.NewsRepository
 import com.project.diacheck.data.remote.repository.UserRepository
 import com.project.diacheck.di.Injection
 import com.project.diacheck.ui.form.FormViewModel
 import com.project.diacheck.ui.login.LoginViewModel
 import com.project.diacheck.ui.main.MainViewModel
+import com.project.diacheck.ui.news.NewsViewModel
 import com.project.diacheck.ui.profile.ProfileViewModel
 import com.project.diacheck.ui.signup.SignupViewModel
 
 class ViewModelFactory(
     private val userRepository: UserRepository,
-    private val formRepository: FormRepository
+    private val formRepository: FormRepository,
+    private val newsRepository: NewsRepository
 ) : ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
@@ -23,18 +26,27 @@ class ViewModelFactory(
             modelClass.isAssignableFrom(MainViewModel::class.java) -> {
                 MainViewModel(userRepository) as T
             }
+
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
                 LoginViewModel(userRepository) as T
             }
+
             modelClass.isAssignableFrom(SignupViewModel::class.java) -> {
                 SignupViewModel(userRepository) as T
             }
+
             modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
                 ProfileViewModel(userRepository) as T
             }
+
             modelClass.isAssignableFrom(FormViewModel::class.java) -> {
-                FormViewModel(formRepository) as T
+                FormViewModel(formRepository, userRepository) as T
             }
+
+            modelClass.isAssignableFrom(NewsViewModel::class.java) -> {
+                NewsViewModel(newsRepository) as T
+            }
+
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
     }
@@ -42,13 +54,15 @@ class ViewModelFactory(
     companion object {
         @Volatile
         private var INSTANCE: ViewModelFactory? = null
+
         @JvmStatic
         fun getInstance(context: Context): ViewModelFactory {
             if (INSTANCE == null) {
                 synchronized(ViewModelFactory::class.java) {
                     INSTANCE = ViewModelFactory(
                         Injection.provideUserRepository(context),
-                        Injection.provideFormRepository(context)
+                        Injection.provideFormRepository(context),
+                        Injection.provideNewsRepository(context)
                     )
                 }
             }

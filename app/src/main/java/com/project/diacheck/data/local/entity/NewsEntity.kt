@@ -5,10 +5,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "articles")
-data class NewsEntity (
-    @field:ColumnInfo(name = "id_article")
-    @PrimaryKey
-    val id: Int,
+data class NewsEntity(
+    @field:ColumnInfo(name = "id")
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
 
     @field:ColumnInfo(name = "thumbnail")
     val thumbnail: String,
@@ -18,7 +18,4 @@ data class NewsEntity (
 
     @field:ColumnInfo(name = "body")
     val body: String,
-
-    @field:ColumnInfo(name = "update_at")
-    val date: String
 )

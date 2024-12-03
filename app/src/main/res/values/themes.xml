@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.DiaCheck" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
@@ -24,20 +24,25 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textColorHint">@color/white</item>
     </style>
+
     <style name="FloatingButtonStyle" parent="Widget.Material3.FloatingActionButton.Primary">
         <item name="backgroundTint">@color/orange</item>
         <item name="iconTint">@color/white</item>
     </style>
+
     <style name="BottomNavStyle" parent="Widget.Material3.BottomNavigationView">
         <item name="android:background">@color/orange</item>
         <item name="itemIconTint">@color/white</item>
         <item name="itemTextColor">@color/white</item>
     </style>
+
     <style name="ToolbarStyle" parent="Widget.Material3.Toolbar">
         <item name="android:background">@color/orange</item>
     </style>
+
     <style name="ToolbarStyleTitle" parent="Widget.AppCompat.TextView">
         <item name="android:textColor">@color/white</item>
     </style>
+
     <style name="Theme.DiaCheck" parent="Base.Theme.DiaCheck" />
 </resources>

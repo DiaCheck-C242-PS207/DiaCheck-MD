@@ -1,10 +1,10 @@
 package com.project.diacheck.ml
 
 import android.content.Context
+import org.json.JSONObject
 import org.tensorflow.lite.Interpreter
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import org.json.JSONObject
 
 class DiabetesClassifierHelper(
     val context: Context,

@@ -2,11 +2,15 @@ package com.project.diacheck.ui.detail
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.RadioGroup
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.project.diacheck.R
+import com.project.diacheck.data.remote.response.SubmitFormItem
 import com.project.diacheck.databinding.ActivityAddFormBinding
 import com.project.diacheck.ui.ViewModelFactory
 import com.project.diacheck.ui.form.FormViewModel
@@ -49,11 +53,15 @@ class AddFormActivity : AppCompatActivity() {
 
         btnSubmit.setOnClickListener {
             try {
-                // Get inputs
-                val age = etAge.text.toString().toFloatOrNull() ?: throw Exception("Age is required")
-                val bmi = etBMI.text.toString().toFloatOrNull() ?: throw Exception("BMI is required")
-                val hbA1c = etHbA1c.text.toString().toFloatOrNull() ?: throw Exception("HbA1c is required")
-                val bloodGlucose = etBloodGlucose.text.toString().toFloatOrNull() ?: throw Exception("Blood glucose is required")
+                // Ambil input dari user
+                val age =
+                    etAge.text.toString().toFloatOrNull() ?: throw Exception("Age is required")
+                val bmi =
+                    etBMI.text.toString().toFloatOrNull() ?: throw Exception("BMI is required")
+                val hbA1c =
+                    etHbA1c.text.toString().toFloatOrNull() ?: throw Exception("HbA1c is required")
+                val bloodGlucose = etBloodGlucose.text.toString().toFloatOrNull()
+                    ?: throw Exception("Blood glucose is required")
 
                 val gender = when (rgGender.checkedRadioButtonId) {
                     R.id.rbMale -> 1f
@@ -73,19 +81,36 @@ class AddFormActivity : AppCompatActivity() {
                     else -> throw Exception("Heart disease not selected")
                 }
 
-                // Prepare input array
-                val input = floatArrayOf(gender, age, hypertension, heartDisease, bmi, hbA1c, bloodGlucose)
+                val formItem = SubmitFormItem(
+                    gender = gender.toInt(),
+                    hypertension = hypertension.toInt(),
+                    heart_disease = heartDisease.toInt(),
+                    age = age.toInt(),
+                    bmi = bmi,
+                    hbA1c = hbA1c,
+                    blood_glucose = bloodGlucose
+                )
 
-                // Pass result to DetailActivity
+                viewModel.submitForm(formItem)
+
+                val input =
+                    floatArrayOf(gender, age, hypertension, heartDisease, bmi, hbA1c, bloodGlucose)
+
+                // Navigasi ke halaman detail (misalnya untuk menampilkan hasil)
                 val intent = Intent(this, DetailActivity::class.java).apply {
                     putExtra("PREDICTION_INPUT", input)
                 }
                 startActivity(intent)
 
             } catch (e: Exception) {
-                Toast.makeText(this, "Please fill all fields correctly. Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Please fill all fields correctly. Error: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
+
 
     }
 }

@@ -3,7 +3,6 @@ package com.project.diacheck.ui.news
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
@@ -11,14 +10,11 @@ import com.project.diacheck.R
 import com.project.diacheck.data.Result
 import com.project.diacheck.data.local.entity.NewsEntity
 import com.project.diacheck.databinding.ActivityDetailNewsBinding
-import com.project.diacheck.ui.ViewModelFactory
 
 class DetailNewsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailNewsBinding
-    private var currentEvent: NewsEntity? = null
-    private val detailViewModel by viewModels<DetailNewsViewModel> {
-        ViewModelFactory.getInstance(application)
-    }
+    private lateinit var newsModel: NewsViewModel
+    private lateinit var detailView: NewsEntity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,19 +34,17 @@ class DetailNewsActivity : AppCompatActivity() {
                     R.drawable.ic_arrow_back
                 )
             )
-            title = getString(R.string.title_news)
+            title = getString(R.string.detail_news)
         }
 
         val newsId = intent.getStringExtra(EXTRA_NEWS_ID)
-
         if (newsId != null) {
             observeNewsDetails(newsId)
         }
-
     }
 
     private fun observeNewsDetails(newsId: String) {
-        detailViewModel.getDetailNews(newsId).observe(this) { result ->
+        newsModel.getNewsById(newsId).observe(this) { result ->
             when (result) {
                 is Result.Loading -> {
                     binding.linearProgressBar.visibility = View.VISIBLE
@@ -59,27 +53,21 @@ class DetailNewsActivity : AppCompatActivity() {
                 is Result.Success -> {
                     binding.linearProgressBar.visibility = View.GONE
                     val news = result.data
-                    currentEvent = news
-                    populateEventDetails(news)
+                    detailView = news
+                    showNewsDetails(news)
                 }
 
                 is Result.Error -> {
                     binding.linearProgressBar.visibility = View.GONE
-                    Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
 
-    private fun populateEventDetails(news: NewsEntity) {
+    private fun showNewsDetails(news: NewsEntity) {
         binding.tvTitle.text = news.title
-        binding.tvDate.text = news.date
         binding.tvBody.text = HtmlCompat.fromHtml(news.body, HtmlCompat.FROM_HTML_MODE_LEGACY)
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressedDispatcher.onBackPressed()
-        return true
     }
 
     companion object {
