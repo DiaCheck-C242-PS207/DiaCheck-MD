@@ -9,10 +9,12 @@ import android.view.WindowManager
 import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.project.diacheck.R
+import com.project.diacheck.data.local.settings.ThemePreference
 import com.project.diacheck.databinding.ActivityMainBinding
 import com.project.diacheck.ui.ViewModelFactory
 import com.project.diacheck.ui.splash.SplashActivity
@@ -24,6 +26,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (ThemePreference.isDarkMode(this)) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -49,15 +57,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         val logoImageView = findViewById<ImageView>(R.id.toolbar_logo)
-
-        val isDarkMode =
-            resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-
-        if (isDarkMode) {
-            logoImageView.setImageResource(R.drawable.diacheck_black)
-        } else {
-            logoImageView.setImageResource(R.drawable.diacheck_white)
-        }
+//
+//        val isDarkMode =
+//            resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+//
+//        if (isDarkMode) {
+//            logoImageView.setImageResource(R.drawable.diacheck_black)
+//        } else {
+//            logoImageView.setImageResource(R.drawable.diacheck_white)
+//        }
 
         @Suppress("DEPRECATION")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {

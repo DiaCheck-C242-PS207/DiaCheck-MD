@@ -24,6 +24,7 @@ import com.project.diacheck.reduceFileImage
 import com.project.diacheck.ui.ViewModelFactory
 import com.project.diacheck.uriToFile
 import com.project.diacheck.data.Result
+import com.project.diacheck.data.local.settings.ThemePreference
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import okhttp3.MediaType
@@ -44,6 +45,14 @@ class ProfileFragment : Fragment() {
     ): View? {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        val isDarkMode = ThemePreference.isDarkMode(requireContext())
+        binding.switchTheme.isChecked = isDarkMode
+
+        binding.switchTheme.setOnCheckedChangeListener { _, isChecked ->
+            ThemePreference.setDarkMode(requireContext(), isChecked)
+            requireActivity().recreate()
+        }
 
         val profileImageView: ShapeableImageView = binding.profileUser
         val layoutParams = profileImageView.layoutParams
