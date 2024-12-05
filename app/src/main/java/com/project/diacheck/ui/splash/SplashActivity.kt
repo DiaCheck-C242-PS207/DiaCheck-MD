@@ -6,11 +6,10 @@ import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import com.project.diacheck.databinding.ActivitySplashBinding
+import com.project.diacheck.R
 import com.project.diacheck.ui.login.LoginActivity
 
 class SplashActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySplashBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,22 +20,20 @@ class SplashActivity : AppCompatActivity() {
         when (themeMode) {
             "light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             "dark" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            "system" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         }
 
-        binding = ActivitySplashBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+            setContentView(R.layout.night_layout)
+        } else {
+            setContentView(R.layout.light_layout)
+        }
 
-        setupView()
+        supportActionBar?.hide()
 
         Handler(Looper.getMainLooper()).postDelayed({
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }, SPLASH_SCREEN_DURATION)
-    }
-
-    private fun setupView() {
-        supportActionBar?.hide()
     }
 
     companion object {

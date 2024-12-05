@@ -31,7 +31,6 @@
         app:tabIndicatorColor="@color/orange"
         app:tabIndicatorHeight="0dp" />
 
-    <!-- Header dengan sapaan nama pengguna -->
     <TextView
         android:id="@+id/helloTextView"
         android:layout_width="wrap_content"
@@ -39,8 +38,7 @@
         android:layout_marginTop="24dp"
         android:text="@string/hello"
         android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@id/username"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/dotsIndicator" />
 

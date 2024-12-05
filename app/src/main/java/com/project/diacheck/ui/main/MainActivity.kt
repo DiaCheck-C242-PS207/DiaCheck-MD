@@ -1,12 +1,10 @@
 package com.project.diacheck.ui.main
 
 import android.content.Intent
-import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowInsets
 import android.view.WindowManager
-import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -26,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         if (ThemePreference.isDarkMode(this)) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         } else {
@@ -55,17 +54,6 @@ class MainActivity : AppCompatActivity() {
                 finish()
             }
         }
-
-        val logoImageView = findViewById<ImageView>(R.id.toolbar_logo)
-//
-//        val isDarkMode =
-//            resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-//
-//        if (isDarkMode) {
-//            logoImageView.setImageResource(R.drawable.diacheck_black)
-//        } else {
-//            logoImageView.setImageResource(R.drawable.diacheck_white)
-//        }
 
         @Suppress("DEPRECATION")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
