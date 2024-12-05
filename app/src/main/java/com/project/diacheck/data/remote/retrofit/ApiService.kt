@@ -8,12 +8,16 @@ import com.project.diacheck.data.remote.response.LoginResponse
 import com.project.diacheck.data.remote.response.NewsResponse
 import com.project.diacheck.data.remote.response.SignupResponse
 import com.project.diacheck.data.remote.response.SubmitFormItem
+import com.project.diacheck.data.remote.response.UploadProfileResponse
+import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -47,12 +51,11 @@ interface ApiService {
     @GET("articles/{id}")
     suspend fun getDetailNews(@Path("id_articles") newsId: String): DetailNewsResponse
 
-// Get History Diacheck
-
-//    @GET("dia/1")
-//    suspend fun getAllForm(): FormResponse
-
-// Upload Form
+    @Multipart
+    @POST("users")
+    suspend fun uploadImage(
+        @Part image: MultipartBody.Part
+    ): UploadProfileResponse
 
     @POST("history/submit")
     suspend fun submitHistory(@Body formItem: SubmitFormItem): Response<ListFormItem>

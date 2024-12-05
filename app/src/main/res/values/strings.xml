@@ -65,4 +65,10 @@
     <string name="title_detail_news">Detail News</string>
     <string name="title_result">Result</string>
     <string name="detail_news">News</string>
+    <string name="edit_photo">Edit Foto</string>
+    <string name="hello">"Welcome, "</string>
+    <string name="daily_checklist">Daily Checklist</string>
+    <string name="drank_water_8_glasses">Drank water (8 glasses)</string>
+    <string name="light_exercise_30_minutes">Light exercise (30 minutes)</string>
+    <string name="walked_8_000_steps">Walked 8,000 steps</string>
 </resources>

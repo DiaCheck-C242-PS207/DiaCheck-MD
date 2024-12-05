@@ -112,23 +112,14 @@ class LoginActivity : AppCompatActivity() {
                         if (result.data.error == true) {
                             Toast.makeText(this, result.data.message, Toast.LENGTH_SHORT).show()
                         } else {
-                            result.data.loginResult?.let { loginResult ->
+                            result.data.loginResult?.let {
                                 Toast.makeText(
                                     this,
                                     getString(R.string.login_success),
                                     Toast.LENGTH_SHORT
                                 ).show()
 
-                                // Nyimpan session
-                                val userModel = UserModel(
-                                    name = loginResult.name,
-                                    email = loginResult.email,
-                                    token = loginResult.token,
-                                    isLogin = true,
-                                    id_users = loginResult.id_users,
-                                    avatar = loginResult.avatar
-                                )
-                                viewModel.saveSession(userModel)
+                                viewModel.saveSession(UserModel(it.name, email, it.token, true, it.id_users, it.avatar))
 
                                 val intent = Intent(this, MainActivity::class.java)
                                 intent.flags =

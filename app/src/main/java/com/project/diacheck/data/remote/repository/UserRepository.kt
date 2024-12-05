@@ -9,9 +9,15 @@ import com.project.diacheck.data.preference.UserModel
 import com.project.diacheck.data.preference.UserPreference
 import com.project.diacheck.data.remote.response.LoginResponse
 import com.project.diacheck.data.remote.response.SignupResponse
+import com.project.diacheck.data.remote.response.UploadProfileResponse
 import com.project.diacheck.data.remote.retrofit.ApiService
 import kotlinx.coroutines.flow.Flow
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.HttpException
+import retrofit2.Response
+import java.io.File
 
 class UserRepository private constructor(
     private val userPreference: UserPreference,
@@ -73,6 +79,34 @@ class UserRepository private constructor(
 
     suspend fun logout() {
         userPreference.logout()
+    }
+
+    fun uploadImage(imageFile: File): LiveData<Result<UploadProfileResponse>> = liveData {
+        emit(Result.Loading)
+        val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
+        val multipartBody = MultipartBody.Part.createFormData(
+            "photo",
+            imageFile.name,
+            requestImageFile
+        )
+        try {
+            val response = apiService.uploadImage(multipartBody)
+            emit(Result.Success(response))
+        } catch (e: HttpException) {
+            Log.e("uploadProfile", "HTTP Exception: ${e.message}")
+            try {
+                val errorResponse = e.response()?.errorBody()?.string()
+                val gson = Gson()
+                val parsedError = gson.fromJson(errorResponse, UploadProfileResponse::class.java)
+                emit(Result.Success(parsedError))
+            } catch (e: Exception) {
+                Log.e("uploadProfile", "Error parsing error response: ${e.message}")
+                emit(Result.Error("Error: ${e.message}"))
+            }
+        } catch (e: Exception) {
+            Log.e("uploadProfile", "General Exception: ${e.message}")
+            emit(Result.Error(e.message.toString()))
+        }
     }
 
     companion object {

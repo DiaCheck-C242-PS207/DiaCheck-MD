@@ -17,10 +17,12 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
 
     suspend fun saveSession(user: UserModel) {
         dataStore.edit { preferences ->
+            preferences[NAME_KEY] = user.name
             preferences[EMAIL_KEY] = user.email
             preferences[TOKEN_KEY] = user.token
             preferences[IS_LOGIN_KEY] = true
             preferences[ID_USERS_KEY] = user.id_users
+            preferences[AVATAR_KEY] = user.avatar?: ""
         }
     }
 

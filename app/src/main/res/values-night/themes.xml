@@ -29,4 +29,10 @@
     <style name="ToolbarStyleTitle" parent="Widget.AppCompat.TextView">
         <item name="android:textColor">@color/orange</item>
     </style>
+
+    <style name="CircleImageViewStyle" parent="Widget.MaterialComponents.ShapeableImageView">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
 </resources>

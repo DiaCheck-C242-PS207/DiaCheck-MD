@@ -6,5 +6,5 @@ data class UserModel(
     val token: String,
     val isLogin: Boolean = false,
     val id_users: Int,
-    val avatar: String
+    val avatar: String? = null
 )
