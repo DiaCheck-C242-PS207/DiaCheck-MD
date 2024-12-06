@@ -31,6 +31,14 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
+import androidx.work.*
+import com.project.diacheck.NotificationPermissionUtil
+import com.project.diacheck.ui.worker.NotificationWorker
+import java.util.concurrent.TimeUnit
 
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
@@ -52,6 +60,22 @@ class ProfileFragment : Fragment() {
         binding.switchTheme.setOnCheckedChangeListener { _, isChecked ->
             ThemePreference.setDarkMode(requireContext(), isChecked)
             requireActivity().recreate()
+        }
+
+        binding.switchNotifications.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                if (ActivityCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.POST_NOTIFICATIONS
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    scheduleNotification()
+                } else {
+                    requestNotificationPermission()
+                }
+            } else {
+                cancelNotification()
+            }
         }
 
         val profileImageView: ShapeableImageView = binding.profileUser
@@ -166,6 +190,63 @@ class ProfileFragment : Fragment() {
                 }
             }
             .show()
+    }
+
+    private fun requestNotificationPermission() {
+        if (hasAskedNotificationPermission()) {
+            Toast.makeText(
+                requireContext(),
+                "Permission already requested",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
+
+        val permissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted ->
+            if (isGranted) {
+                scheduleNotification()
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "Notification permission denied",
+                    Toast.LENGTH_SHORT
+                ).show()
+                binding.switchNotifications.isChecked = false
+            }
+            setAskedNotificationPermission()
+        }
+        permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+    }
+
+
+    private fun hasAskedNotificationPermission(): Boolean {
+        val prefs = requireContext().getSharedPreferences("notification_prefs", Context.MODE_PRIVATE)
+        return prefs.getBoolean("asked_permission", false)
+    }
+
+    private fun setAskedNotificationPermission() {
+        val prefs = requireContext().getSharedPreferences("notification_prefs", Context.MODE_PRIVATE)
+        prefs.edit().putBoolean("asked_permission", true).apply()
+    }
+
+
+    private fun scheduleNotification() {
+        val workRequest = PeriodicWorkRequestBuilder<NotificationWorker>(8, TimeUnit.HOURS)
+            .build()
+
+        WorkManager.getInstance(requireContext()).enqueueUniquePeriodicWork(
+            "8HourNotification",
+            ExistingPeriodicWorkPolicy.REPLACE,
+            workRequest
+        )
+        Toast.makeText(requireContext(), "Notifications scheduled", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun cancelNotification() {
+        WorkManager.getInstance(requireContext()).cancelUniqueWork("8HourNotification")
+        Toast.makeText(requireContext(), "Notifications canceled", Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {

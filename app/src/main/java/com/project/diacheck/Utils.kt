@@ -18,6 +18,11 @@ import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import android.Manifest
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.core.content.ContextCompat
+import androidx.core.content.PermissionChecker
 
 private const val FILENAME_FORMAT = "yyyyMMdd_HHmmss"
 private val timeStamp: String = SimpleDateFormat(FILENAME_FORMAT, Locale.US).format(Date())
@@ -102,4 +107,25 @@ fun rotateImage(source: Bitmap, angle: Float): Bitmap? {
     return Bitmap.createBitmap(
         source, 0, 0, source.width, source.height, matrix, true
     )
+}
+
+object NotificationPermissionUtil {
+
+    fun isNotificationPermissionGranted(context: Context): Boolean {
+        return ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.POST_NOTIFICATIONS
+        ) == PermissionChecker.PERMISSION_GRANTED
+    }
+
+    fun requestNotificationPermission(
+        launcher: ActivityResultLauncher<String>,
+        context: Context
+    ) {
+        if (!isNotificationPermissionGranted(context)) {
+            launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            Toast.makeText(context, "Permission already granted!", Toast.LENGTH_SHORT).show()
+        }
+    }
 }

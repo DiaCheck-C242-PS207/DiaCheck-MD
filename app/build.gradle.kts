@@ -88,4 +88,7 @@ dependencies {
     // Gson
     implementation(libs.converter.gson)
 
+    // Worker
+    implementation ("androidx.work:work-runtime-ktx:2.8.1")
+
 }
