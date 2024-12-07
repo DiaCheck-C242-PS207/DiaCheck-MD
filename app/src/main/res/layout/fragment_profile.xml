@@ -28,11 +28,11 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/edit_photo"
             android:src="@drawable/baseline_edit_24"
+            app:tint="@color/white"
             app:fabCustomSize="35dp"
             app:layout_constraintEnd_toEndOf="@id/profileUser"
             app:layout_constraintBottom_toBottomOf="@id/profileUser"
             app:backgroundTint="@color/orange" />
-
 
         <TextView
             android:id="@+id/name"

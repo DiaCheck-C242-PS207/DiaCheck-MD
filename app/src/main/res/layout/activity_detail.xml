@@ -70,6 +70,33 @@
                 android:textSize="16sp"
                 android:textColor="@android:color/black"
                 android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/textViewPrediction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Penjelasan"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/textViewMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Penjelasan"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/textViewProbability"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Penjelasan"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:layout_marginTop="8dp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

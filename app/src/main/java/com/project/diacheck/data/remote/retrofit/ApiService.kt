@@ -6,6 +6,8 @@ import com.project.diacheck.data.remote.response.DetailNewsResponse
 import com.project.diacheck.data.remote.response.ListFormItem
 import com.project.diacheck.data.remote.response.LoginResponse
 import com.project.diacheck.data.remote.response.NewsResponse
+import com.project.diacheck.data.remote.response.PredictionData
+import com.project.diacheck.data.remote.response.PredictionResponse
 import com.project.diacheck.data.remote.response.SignupResponse
 import com.project.diacheck.data.remote.response.SubmitFormItem
 import com.project.diacheck.data.remote.response.UploadProfileResponse
@@ -68,4 +70,6 @@ interface ApiService {
     @GET("histories/{id}")
     suspend fun getHistoryById(@Path("id") id: Int): Response<DetailHistoriesResponse>
 
+    @POST("/predictions")
+    suspend fun predict(@Body formItem: SubmitFormItem): PredictionResponse
 }

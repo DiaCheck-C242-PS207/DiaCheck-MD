@@ -12,7 +12,9 @@ import com.project.diacheck.data.preference.UserModel
 import com.project.diacheck.data.remote.repository.FormRepository
 import com.project.diacheck.data.remote.repository.UserRepository
 import com.project.diacheck.data.remote.response.DetailHistoriesResponse
+import com.project.diacheck.data.remote.response.PredictionResponse
 import com.project.diacheck.data.remote.response.SubmitFormItem
+import com.project.diacheck.data.remote.retrofit.ApiML
 import kotlinx.coroutines.launch
 
 class FormViewModel(

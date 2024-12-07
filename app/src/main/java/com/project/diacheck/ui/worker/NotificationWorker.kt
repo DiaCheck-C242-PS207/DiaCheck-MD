@@ -36,11 +36,12 @@ class NotificationWorker(context: Context, workerParams: WorkerParameters) :
 
         val notification = NotificationCompat.Builder(applicationContext, channelId)
             .setSmallIcon(R.drawable.dia_light)
-            .setContentTitle(R.string.stay_healthy.toString())
-            .setContentText(R.string.text_notification.toString())
+            .setContentTitle(applicationContext.getString(R.string.stay_healthy))
+            .setContentText(applicationContext.getString(R.string.text_notification))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .build()
 
         notificationManager.notify(notificationId, notification)
     }
+
 }

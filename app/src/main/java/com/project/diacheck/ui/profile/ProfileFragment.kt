@@ -32,19 +32,43 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
 import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.result.ActivityResultLauncher
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.work.*
 import com.project.diacheck.NotificationPermissionUtil
 import com.project.diacheck.ui.worker.NotificationWorker
 import java.util.concurrent.TimeUnit
 
 class ProfileFragment : Fragment() {
+    private lateinit var permissionLauncher: ActivityResultLauncher<String>
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModels<ProfileViewModel> {
         ViewModelFactory.getInstance(requireContext())
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Registrasi Permission Launcher
+        permissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted ->
+            if (isGranted) {
+                scheduleNotification()
+                Toast.makeText(requireContext(), "Notifications enabled", Toast.LENGTH_SHORT).show()
+            } else {
+                binding.switchNotifications.isChecked = false
+                Toast.makeText(requireContext(), "Notification permission denied", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     override fun onCreateView(
@@ -111,6 +135,25 @@ class ProfileFragment : Fragment() {
 
         return view
     }
+
+    private fun requestNotificationPermission() {
+        permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+    }
+
+    private fun scheduleNotification() {
+        val workRequest = PeriodicWorkRequestBuilder<NotificationWorker>(8, TimeUnit.HOURS).build()
+
+        WorkManager.getInstance(requireContext()).enqueueUniquePeriodicWork(
+            "8HourNotification",
+            ExistingPeriodicWorkPolicy.REPLACE,
+            workRequest
+        )
+    }
+
+    private fun cancelNotification() {
+        WorkManager.getInstance(requireContext()).cancelUniqueWork("8HourNotification")
+    }
+
 
     private val launcherGallery = registerForActivityResult(
         ActivityResultContracts.PickVisualMedia()
@@ -190,63 +233,6 @@ class ProfileFragment : Fragment() {
                 }
             }
             .show()
-    }
-
-    private fun requestNotificationPermission() {
-        if (hasAskedNotificationPermission()) {
-            Toast.makeText(
-                requireContext(),
-                "Permission already requested",
-                Toast.LENGTH_SHORT
-            ).show()
-            return
-        }
-
-        val permissionLauncher = registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted ->
-            if (isGranted) {
-                scheduleNotification()
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    "Notification permission denied",
-                    Toast.LENGTH_SHORT
-                ).show()
-                binding.switchNotifications.isChecked = false
-            }
-            setAskedNotificationPermission()
-        }
-        permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-    }
-
-
-    private fun hasAskedNotificationPermission(): Boolean {
-        val prefs = requireContext().getSharedPreferences("notification_prefs", Context.MODE_PRIVATE)
-        return prefs.getBoolean("asked_permission", false)
-    }
-
-    private fun setAskedNotificationPermission() {
-        val prefs = requireContext().getSharedPreferences("notification_prefs", Context.MODE_PRIVATE)
-        prefs.edit().putBoolean("asked_permission", true).apply()
-    }
-
-
-    private fun scheduleNotification() {
-        val workRequest = PeriodicWorkRequestBuilder<NotificationWorker>(8, TimeUnit.HOURS)
-            .build()
-
-        WorkManager.getInstance(requireContext()).enqueueUniquePeriodicWork(
-            "8HourNotification",
-            ExistingPeriodicWorkPolicy.REPLACE,
-            workRequest
-        )
-        Toast.makeText(requireContext(), "Notifications scheduled", Toast.LENGTH_SHORT).show()
-    }
-
-    private fun cancelNotification() {
-        WorkManager.getInstance(requireContext()).cancelUniqueWork("8HourNotification")
-        Toast.makeText(requireContext(), "Notifications canceled", Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {

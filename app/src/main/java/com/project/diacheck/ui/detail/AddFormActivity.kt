@@ -2,6 +2,8 @@ package com.project.diacheck.ui.detail
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioGroup
@@ -9,11 +11,16 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.project.diacheck.R
 import com.project.diacheck.data.remote.response.SubmitFormItem
+import com.project.diacheck.data.remote.retrofit.ApiML
 import com.project.diacheck.databinding.ActivityAddFormBinding
 import com.project.diacheck.ui.ViewModelFactory
 import com.project.diacheck.ui.form.FormViewModel
+import kotlinx.coroutines.launch
+import java.io.IOException
+import java.net.SocketTimeoutException
 
 class AddFormActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddFormBinding
@@ -53,7 +60,6 @@ class AddFormActivity : AppCompatActivity() {
 
         btnSubmit.setOnClickListener {
             try {
-                // Ambil input dari user
                 val age =
                     etAge.text.toString().toFloatOrNull() ?: throw Exception("Age is required")
                 val bmi =
@@ -81,26 +87,106 @@ class AddFormActivity : AppCompatActivity() {
                     else -> throw Exception("Heart disease not selected")
                 }
 
-                val formItem = SubmitFormItem(
-                    gender = gender.toInt(),
-                    hypertension = hypertension.toInt(),
-                    heart_disease = heartDisease.toInt(),
-                    age = age.toInt(),
-                    bmi = bmi,
-                    hbA1c = hbA1c,
-                    blood_glucose = bloodGlucose
-                )
+//                val formItem = SubmitFormItem(
+//                    gender = gender,
+//                    age = age,
+//                    hypertension = hypertension,
+//                    heart_disease = heartDisease,
+//                    bmi = bmi,
+//                    hbA1c = hbA1c,
+//                    blood_glucose = bloodGlucose
+//                )
+//
+//                viewModel.submitForm(formItem)
 
-                viewModel.submitForm(formItem)
+                val submitData =
+                    SubmitFormItem(
+                        gender,
+                        age,
+                        hypertension,
+                        heartDisease,
+                        bmi,
+                        hbA1c,
+                        bloodGlucose
+                    )
 
-                val input =
-                    floatArrayOf(gender, age, hypertension, heartDisease, bmi, hbA1c, bloodGlucose)
+// Menggunakan coroutine untuk API call
+                lifecycleScope.launch {
+                    try {
+                        val response = ApiML.getApiML().predict(submitData)
 
-                // Navigasi ke halaman detail (misalnya untuk menampilkan hasil)
-                val intent = Intent(this, DetailActivity::class.java).apply {
-                    putExtra("PREDICTION_INPUT", input)
+                        // Jika request berhasil, kita ambil responsnya
+                        if (response.success == true) {
+                            // Kirim hasilnya ke DetailActivity
+                            val intent = Intent(this@AddFormActivity, DetailActivity::class.java)
+                            intent.putExtra("prediction", response.data?.prediction)
+                            intent.putExtra("prediction_message", response.data?.message)
+                            intent.putExtra("prediction_probability", response.data?.probability)
+                            startActivity(intent)
+                        } else {
+                            // Tampilkan pesan error jika diperlukan
+                            Log.e("AddFormActivity", "Request gagal: ${response.message}")
+                            Toast.makeText(
+                                this@AddFormActivity,
+                                "Request gagal: ${response.message}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    } catch (e: SocketTimeoutException) {
+                        // Tangani timeout
+                        Log.e("AddFormActivity", "Request timeout: ${e.message}")
+                        Toast.makeText(
+                            this@AddFormActivity,
+                            "Server terlalu lama merespons. Coba lagi nanti.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } catch (e: IOException) {
+                        // Tangani error jaringan atau koneksi
+                        Log.e("AddFormActivity", "Error jaringan: ${e.message}")
+                        Toast.makeText(
+                            this@AddFormActivity,
+                            "Terjadi masalah koneksi. Periksa jaringan Anda.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } catch (e: Exception) {
+                        // Tangani error umum lainnya
+                        Log.e("AddFormActivity", "Error tidak terduga: ${e.message}", e)
+                        Toast.makeText(
+                            this@AddFormActivity,
+                            "Terjadi error: ${e.message}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
-                startActivity(intent)
+
+//                viewModel.submitFormToCloud(formItem).observe(this) { result ->
+//                    when (result) {
+//                        is Result.Success -> {
+//                            val prediction = result.data.responseCode
+//                            val intent = Intent(this, DetailActivity::class.java).apply {
+//                                putExtra("PREDICTION_RESULT", prediction)
+//                            }
+//                            startActivity(intent)
+//                        }
+//                        is Result.Error -> {
+//                            Toast.makeText(
+//                                this,
+//                                "Error: ${result.error}",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+//                        }
+//                        is Result.Loading -> {
+//                            showLoading(false)
+//                        }
+//                    }
+//                }
+
+//                val input = floatArrayOf(gender, age, hypertension, heartDisease, bmi, hbA1c, bloodGlucose)
+
+//                val intent = Intent(this, DetailActivity::class.java).apply {
+//                    putExtra("PREDICTION_INPUT", input)
+//                }
+//                startActivity(intent)
 
             } catch (e: Exception) {
                 Toast.makeText(
@@ -110,7 +196,9 @@ class AddFormActivity : AppCompatActivity() {
                 ).show()
             }
         }
+    }
 
-
+    private fun showLoading(isLoading: Boolean) {
+        binding.linearProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 }

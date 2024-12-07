@@ -58,11 +58,12 @@ data class ListFormItem(
 )
 
 data class SubmitFormItem(
-    val gender: Int,
-    val hypertension: Int,
-    val heart_disease: Int,
-    val age: Int,
-    val bmi: Float,
-    val hbA1c: Float,
-    val blood_glucose: Float
+    @SerializedName("gender") val gender: Float,
+    @SerializedName("age") val age: Float,
+    @SerializedName("hypertension") val hypertension: Float,
+    @SerializedName("heart_disease") val heartDisease: Float,
+    @SerializedName("bmi") val bmi: Float,
+    @SerializedName("HbA1c_level") val HbA1cLevel: Float,
+    @SerializedName("blood_glucose_level") val bloodGlucoseLevel: Float
 )
+

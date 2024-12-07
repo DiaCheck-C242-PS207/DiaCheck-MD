@@ -2,6 +2,7 @@ package com.project.diacheck.ui.detail
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -23,6 +24,29 @@ class DetailActivity : AppCompatActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Ambil data dari Intent
+        val prediction = intent.getIntExtra("prediction", -1)
+        val predictionMessage = intent.getStringExtra("prediction_message")
+        val predictionProbability = intent.getFloatExtra("prediction_probability", 0f)
+
+        // Tampilkan hasil ke UI
+        val textViewPrediction = findViewById<TextView>(R.id.textViewPrediction)
+        val textViewMessage = findViewById<TextView>(R.id.textViewMessage)
+        val textViewProbability = findViewById<TextView>(R.id.textViewProbability)
+
+        val predictionResult = if (prediction == 1) {
+            "Terdeteksi diabetes"
+        } else if (prediction == 0) {
+            "Tidak terdeteksi diabetes"
+        } else {
+            "Hasil tidak valid"
+        }
+
+// Set nilai ke TextView
+        textViewPrediction.text = predictionResult
+        textViewMessage.text = predictionMessage ?: "Tidak ada pesan"
+        textViewProbability.text = "Probabilitas: ${predictionProbability.toInt()}%"
+
         diabetesClassifier = DiabetesClassifierHelper(this)
 
         val factory = ViewModelFactory.getInstance(applicationContext)
@@ -31,29 +55,26 @@ class DetailActivity : AppCompatActivity() {
         val inputData = intent.getFloatArrayExtra("PREDICTION_INPUT")
         val formId = intent.getIntExtra(EXTRA_FORM_ID, 0)
 
-        // Ambil data dari API berdasarkan formId
         if (formId != 0) {
             formViewModel.getHistoryById(formId)
             formViewModel.historyDetail.observe(this) { result ->
                 when (result) {
                     is Result.Success -> {
                         val history = result.data
-                        // Menyusun inputData berdasarkan data dari database
                         val predictionInputData = floatArrayOf(
-                            history.gender.toFloat(),   // Convert gender ke float jika perlu
+                            history.gender.toFloat(),
                             history.age.toFloat(),
                             history.hypertension.toFloat(),
                             history.heartDisease.toFloat(),
-                            history.bmi.toFloat(),
-                            history.hbA1c.toFloat(),
-                            history.bloodGlucose.toFloat()
+                            history.bmi,
+                            history.hbA1c,
+                            history.bloodGlucose
                         )
 
-                        // Prediksi dengan data yang sudah disusun
                         val predictionResult = diabetesClassifier.predict(predictionInputData)
 
                         val predictionPercentage =
-                            predictionResult?.replace("%", "")?.toIntOrNull() ?: 0
+                            predictionResult.replace("%", "").toIntOrNull() ?: 0
 
                         val (category, explanation) = when {
                             predictionPercentage in 0..10 -> "Tidak Berpotensi Diabetes" to "Risiko sangat rendah untuk terkena diabetes. Pola hidup sehat disarankan untuk mempertahankan kondisi ini."
@@ -79,7 +100,7 @@ class DetailActivity : AppCompatActivity() {
                     }
 
                     is Result.Loading -> {
-                        // Tampilkan loading jika sedang mengambil data
+
                     }
                 }
             }
@@ -88,7 +109,7 @@ class DetailActivity : AppCompatActivity() {
         if (inputData != null) {
             val predictionResult = diabetesClassifier.predict(inputData)
 
-            val predictionPercentage = predictionResult?.replace("%", "")?.toIntOrNull() ?: 0
+            val predictionPercentage = predictionResult.replace("%", "").toIntOrNull() ?: 0
 
             val (category, explanation) = when {
                 predictionPercentage in 0..10 -> "Tidak Berpotensi Diabetes" to "Risiko sangat rendah untuk terkena diabetes. Pola hidup sehat disarankan untuk mempertahankan kondisi ini."
@@ -111,7 +132,6 @@ class DetailActivity : AppCompatActivity() {
             binding.tvExplanation.text = "Data input tidak ditemukan"
         }
 
-        // Toolbar setup
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.apply {
