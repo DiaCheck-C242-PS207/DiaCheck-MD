@@ -39,7 +39,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -67,11 +67,6 @@ class HomeFragment : Fragment() {
             }
         }
 
-        binding.btnAdd.setOnClickListener {
-            val intent = Intent(requireContext(), AddFormActivity::class.java)
-            startActivity(intent)
-        }
-
         resetChecklistIfNewDay()
         setupChecklistListeners()
     }
@@ -89,20 +84,30 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupChecklistListeners() {
+        val sharedPrefs = requireContext().getSharedPreferences("daily_checklist_prefs", Context.MODE_PRIVATE)
+        val editor = sharedPrefs.edit()
+
         val checkWater = binding.checkWater
         val checkExercise = binding.checkExercise
         val checkWalking = binding.checkWalking
 
-        val checklistItems = listOf(checkWater, checkExercise, checkWalking)
+        val checklistItems = mapOf(
+            "check_water" to checkWater,
+            "check_exercise" to checkExercise,
+            "check_walking" to checkWalking
+        )
 
-        checklistItems.forEach { checkbox ->
-            checkbox.setOnCheckedChangeListener { _, _ ->
-                if (checklistItems.all { it.isChecked }) {
-                    // Tindakan jika checklist lengkap
+        checklistItems.forEach { (key, checkbox) ->
+            checkbox.setOnCheckedChangeListener { _, isChecked ->
+                editor.putBoolean(key, isChecked).apply()
+
+                if (checklistItems.values.all { it.isChecked }) {
+                    // Lakukan sesuatu, misalnya tampilkan pesan
                 }
             }
         }
     }
+
 
     private fun isNewDay(context: Context): Boolean {
         val prefs = context.getSharedPreferences("daily_checklist_prefs", Context.MODE_PRIVATE)
@@ -117,12 +122,22 @@ class HomeFragment : Fragment() {
     }
 
     private fun resetChecklistIfNewDay() {
+        val sharedPrefs = requireContext().getSharedPreferences("daily_checklist_prefs", Context.MODE_PRIVATE)
+
         if (isNewDay(requireContext())) {
-            binding.checkWater.isChecked = false
-            binding.checkExercise.isChecked = false
-            binding.checkWalking.isChecked = false
+            sharedPrefs.edit().apply {
+                putBoolean("check_water", false)
+                putBoolean("check_exercise", false)
+                putBoolean("check_walking", false)
+                apply()
+            }
         }
+
+        binding.checkWater.isChecked = sharedPrefs.getBoolean("check_water", false)
+        binding.checkExercise.isChecked = sharedPrefs.getBoolean("check_exercise", false)
+        binding.checkWalking.isChecked = sharedPrefs.getBoolean("check_walking", false)
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

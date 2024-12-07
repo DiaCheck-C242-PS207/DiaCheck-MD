@@ -15,4 +15,7 @@
     <color name="unselected_color">#FE5E49</color>
     <color name="dot_selected_color">#EF4138</color>
     <color name="dot_unselected_color">#FE5E49</color>
+    <color name="light_green">#A1EEBD</color>
+    <color name="light_yellow">#FEFFA7</color>
+    <color name="light_red">#ff4a3d</color>
 </resources>

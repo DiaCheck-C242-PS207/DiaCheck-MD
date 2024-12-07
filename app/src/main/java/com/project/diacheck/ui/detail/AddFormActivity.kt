@@ -1,6 +1,7 @@
 package com.project.diacheck.ui.detail
 
 import android.content.Intent
+import android.gesture.Prediction
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.project.diacheck.R
+import com.project.diacheck.data.remote.response.PredictionData
 import com.project.diacheck.data.remote.response.SubmitFormItem
 import com.project.diacheck.data.remote.retrofit.ApiML
 import com.project.diacheck.databinding.ActivityAddFormBinding
@@ -91,13 +93,19 @@ class AddFormActivity : AppCompatActivity() {
 //                    gender = gender,
 //                    age = age,
 //                    hypertension = hypertension,
-//                    heart_disease = heartDisease,
+//                    heartDisease = heartDisease,
 //                    bmi = bmi,
-//                    hbA1c = hbA1c,
-//                    blood_glucose = bloodGlucose
+//                    HbA1cLevel = hbA1c,
+//                    bloodGlucoseLevel = bloodGlucose
 //                )
 //
 //                viewModel.submitForm(formItem)
+//
+//                val result = PredictionData(
+//                    message = ,
+//                    probability = ,
+//                    prediction =
+//                )
 
                 val submitData =
                     SubmitFormItem(
@@ -110,21 +118,23 @@ class AddFormActivity : AppCompatActivity() {
                         bloodGlucose
                     )
 
-// Menggunakan coroutine untuk API call
                 lifecycleScope.launch {
                     try {
+                        showLoading(true)
                         val response = ApiML.getApiML().predict(submitData)
+                        showLoading(false)
 
-                        // Jika request berhasil, kita ambil responsnya
                         if (response.success == true) {
-                            // Kirim hasilnya ke DetailActivity
                             val intent = Intent(this@AddFormActivity, DetailActivity::class.java)
+                            intent.putExtra("input_age", age)
+                            intent.putExtra("input_gender", gender)
+                            intent.putExtra("input_hypertension", hypertension)
+                            intent.putExtra("input_bmi", 25.0f)
                             intent.putExtra("prediction", response.data?.prediction)
                             intent.putExtra("prediction_message", response.data?.message)
                             intent.putExtra("prediction_probability", response.data?.probability)
                             startActivity(intent)
                         } else {
-                            // Tampilkan pesan error jika diperlukan
                             Log.e("AddFormActivity", "Request gagal: ${response.message}")
                             Toast.makeText(
                                 this@AddFormActivity,
@@ -133,7 +143,7 @@ class AddFormActivity : AppCompatActivity() {
                             ).show()
                         }
                     } catch (e: SocketTimeoutException) {
-                        // Tangani timeout
+                        showLoading(false) // Sembunyikan loading pada error
                         Log.e("AddFormActivity", "Request timeout: ${e.message}")
                         Toast.makeText(
                             this@AddFormActivity,
@@ -141,7 +151,7 @@ class AddFormActivity : AppCompatActivity() {
                             Toast.LENGTH_LONG
                         ).show()
                     } catch (e: IOException) {
-                        // Tangani error jaringan atau koneksi
+                        showLoading(false) // Sembunyikan loading pada error
                         Log.e("AddFormActivity", "Error jaringan: ${e.message}")
                         Toast.makeText(
                             this@AddFormActivity,
@@ -149,7 +159,7 @@ class AddFormActivity : AppCompatActivity() {
                             Toast.LENGTH_LONG
                         ).show()
                     } catch (e: Exception) {
-                        // Tangani error umum lainnya
+                        showLoading(false) // Sembunyikan loading pada error
                         Log.e("AddFormActivity", "Error tidak terduga: ${e.message}", e)
                         Toast.makeText(
                             this@AddFormActivity,
@@ -158,6 +168,7 @@ class AddFormActivity : AppCompatActivity() {
                         ).show()
                     }
                 }
+
 
 //                viewModel.submitFormToCloud(formItem).observe(this) { result ->
 //                    when (result) {

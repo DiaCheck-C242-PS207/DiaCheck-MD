@@ -15,6 +15,10 @@
         <item name="tabIndicatorColor">@color/dot_selected_color</item>
     </style>
 
+    <style name="CardViewStyle">
+        <item name="backgroundColor">@color/black_1</item>
+    </style>
+
     <style name="BottomNavStyle" parent="Widget.Material3.BottomNavigationView">
         <item name="android:background">@color/black_1</item>
         <item name="itemIconTint">@color/orange</item>
