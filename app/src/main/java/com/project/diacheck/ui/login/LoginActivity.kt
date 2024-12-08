@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -95,7 +96,7 @@ class LoginActivity : AppCompatActivity() {
         binding.loginButton.setOnClickListener {
             val email = binding.emailEditTextLayout.text.toString()
             val password = binding.passwordEditTextLayout.text.toString()
-
+            Log.d("LoginRequest", "Email: $email, Password: $password")
             viewModel.login(email, password).observe(this) { result ->
                 when (result) {
                     is Result.Error -> {
@@ -109,34 +110,46 @@ class LoginActivity : AppCompatActivity() {
 
                     is Result.Success -> {
                         binding.linearProgressBar.visibility = View.GONE
-                        if (result.data.error == true) {
-                            Toast.makeText(this, result.data.message, Toast.LENGTH_SHORT).show()
+                        val loginResult = result.data.loginResult
+                        val token = result.data.token
+
+                        if (loginResult != null) {
+                            Toast.makeText(
+                                this,
+                                getString(R.string.login_success),
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                            val userModel = UserModel(
+                                name = loginResult.name,
+                                email = loginResult.email,
+                                token = token,
+                                isLogin = true,
+                                id_users = loginResult.id_users,
+                                avatar = loginResult.avatar
+                            )
+
+                            viewModel.saveSession(userModel)
+
+                            // Navigasi ke MainActivity
+                            val intent = Intent(this, MainActivity::class.java)
+                            intent.flags =
+                                Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                            startActivity(intent)
+                            finish()
                         } else {
-                            result.data.loginResult?.let {
-                                Toast.makeText(
-                                    this,
-                                    getString(R.string.login_success),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-
-                                viewModel.saveSession(UserModel(it.name, email, it.token, true, it.id_users, it.avatar))
-
-                                val intent = Intent(this, MainActivity::class.java)
-                                intent.flags =
-                                    Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                                startActivity(intent)
-                                finish()
-                            }
+                            Toast.makeText(this, "Login gagal: Data tidak valid", Toast.LENGTH_SHORT).show()
                         }
-
                     }
                 }
             }
         }
+
         binding.createAccountText.setOnClickListener {
             val intent = Intent(this, SignupActivity::class.java)
             startActivity(intent)
         }
     }
+
 
 }

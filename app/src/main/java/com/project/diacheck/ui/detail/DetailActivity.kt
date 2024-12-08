@@ -27,22 +27,25 @@ class DetailActivity : AppCompatActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Ambil data input dari Intent
-        val age = intent.getFloatExtra("input_age", -1f).toInt()
-        val gender = intent.getFloatExtra("input_gender", 0f)
-        val hypertension = intent.getBooleanExtra("input_hypertension", false)
+        val age = intent.getIntExtra("input_age", 0)
+        val gender = intent.getIntExtra("input_gender", 0)
+        val hypertension = intent.getIntExtra("input_hypertension", 0)
+        val heartdisease = intent.getIntExtra("input_heartDisease", 0)
         val bmi = intent.getFloatExtra("input_bmi", 0f)
+        val hbA1c = intent.getFloatExtra("input_hbA1c", 0f)
+        val bloodGlucose = intent.getIntExtra("input_bloodGlucose", 0)
 
-        // Atur teks di cardInput
         binding.textViewInputAge.text = "Usia: $age tahun"
-        binding.textViewInputGender.text = if (gender == 1f) "Laki-laki" else "Perempuan"
-        binding.textViewInputHypertension.text = "Hipertensi: ${if (hypertension) "Ya" else "Tidak"}"
+        binding.textViewInputGender.text = if (gender == 1) "Laki-laki" else "Perempuan"
+        binding.textViewInputHypertension.text = "Hipertensi: ${if (hypertension == 1) "Ya" else "Tidak"}"
+        binding.textViewInputHeartDisease.text = "Penyakit Jantung: ${if (heartdisease == 1) "Ya" else "Tidak"}"
         binding.textViewInputBMI.text = "BMI: $bmi"
+        binding.textViewInputHbA1c.text = "HbA1c: $hbA1c"
+        binding.textViewInputBloodGlucose.text = "Gula Darah: $bloodGlucose"
 
         val prediction = intent.getIntExtra("prediction", -1)
         val predictionMessage = intent.getStringExtra("prediction_message")
         val predictionProbability = intent.getFloatExtra("prediction_probability", 0f)
-        val formattedProbability = String.format("%.2f", predictionProbability)
 
         val textViewPrediction = findViewById<TextView>(R.id.textViewPrediction)
         val textViewMessage = findViewById<TextView>(R.id.textViewMessage)
@@ -59,7 +62,6 @@ class DetailActivity : AppCompatActivity() {
 
         textViewPrediction.text = predictionResult
         textViewMessage.text = predictionMessage ?: "Tidak ada pesan"
-        textViewProbability.text = "Probabilitas: ${formattedProbability}%"
 
         val strokeColor = when {
             predictionProbability in 0f..20f -> R.color.light_green

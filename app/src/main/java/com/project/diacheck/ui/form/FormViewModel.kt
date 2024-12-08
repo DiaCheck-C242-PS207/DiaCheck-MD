@@ -11,6 +11,8 @@ import com.project.diacheck.data.local.entity.HistoryEntity
 import com.project.diacheck.data.preference.UserModel
 import com.project.diacheck.data.remote.repository.FormRepository
 import com.project.diacheck.data.remote.repository.UserRepository
+import com.project.diacheck.data.remote.request.CreateHistoryRequest
+import com.project.diacheck.data.remote.response.AddHistoryResponse
 import com.project.diacheck.data.remote.response.DetailHistoriesResponse
 import com.project.diacheck.data.remote.response.PredictionResponse
 import com.project.diacheck.data.remote.response.SubmitFormItem
@@ -21,29 +23,35 @@ class FormViewModel(
     private val formRepository: FormRepository,
     private val userRepository: UserRepository
 ) : ViewModel() {
-    val historyDetail = MutableLiveData<Result<DetailHistoriesResponse>>()
+    private val _formResult = MutableLiveData<Result<List<HistoryEntity>>>()
+    val formResult: LiveData<Result<List<HistoryEntity>>> get() = _formResult
+    private val _createHistoryResult = MutableLiveData<Result<AddHistoryResponse>>()
+    val createHistoryResult: LiveData<Result<AddHistoryResponse>> get() = _createHistoryResult
 
-    fun getHistoryById(id: Int) {
+    fun findFormByUserId(userId: String) {
         viewModelScope.launch {
-            val result = formRepository.getHistoryById(id)
-            historyDetail.value = result
+            _formResult.postValue(Result.Loading)
+            try {
+                val result = formRepository.getFormById(userId)
+                _formResult.postValue(Result.Success(result))
+            } catch (e: Exception) {
+                _formResult.postValue(Result.Error(e.message ?: "An error occurred"))
+            }
         }
-    }
-
-    fun findFormByUserId(userId: String): LiveData<Result<List<HistoryEntity>>> {
-        return formRepository.getFormById(userId)
     }
 
     fun getSession(): LiveData<UserModel> {
         return userRepository.getSession().asLiveData()
     }
 
-    fun submitForm(formItem: SubmitFormItem) {
+    fun createHistory(request: CreateHistoryRequest) {
         viewModelScope.launch {
+            _createHistoryResult.value = Result.Loading
             try {
-                formRepository.submitForm(formItem)
+                val response = formRepository.createHistory(request)
+                _createHistoryResult.value = Result.Success(response)
             } catch (e: Exception) {
-                Log.e("FormViewModel", "Error: ${e.message}")
+                _createHistoryResult.value = Result.Error(e.message ?: "An error occurred")
             }
         }
     }

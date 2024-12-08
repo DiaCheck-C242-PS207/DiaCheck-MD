@@ -74,12 +74,37 @@
                 android:layout_marginBottom="4dp" />
 
             <TextView
+                android:id="@+id/textViewInputHeartDisease"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Penyakit Jantung: Tidak"
+                android:textSize="16sp"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
                 android:id="@+id/textViewInputBMI"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="BMI: 25.0"
                 android:textSize="16sp"
                 android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/textViewInputHbA1c"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HbA1c: 6.5"
+                android:textSize="16sp"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/textViewInputBloodGlucose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gula Darah: 140"
+                android:textSize="16sp"
+                android:layout_marginBottom="4dp" />
+
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 

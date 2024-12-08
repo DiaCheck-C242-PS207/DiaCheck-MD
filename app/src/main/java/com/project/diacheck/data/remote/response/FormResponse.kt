@@ -4,14 +4,11 @@ import com.google.gson.annotations.SerializedName
 
 data class FormResponse(
 
-    @field:SerializedName("listHistory")
-    val listHistory: List<ListFormItem?>? = null,
-
-    @field:SerializedName("error")
-    val error: Boolean,
-
     @field:SerializedName("message")
-    val message: String
+    val message: String,
+
+    @field:SerializedName("listHistory")
+    val listHistory: List<ListFormItem?>? = null
 )
 
 data class ListFormItem(
@@ -58,12 +55,12 @@ data class ListFormItem(
 )
 
 data class SubmitFormItem(
-    @SerializedName("gender") val gender: Float,
-    @SerializedName("age") val age: Float,
-    @SerializedName("hypertension") val hypertension: Float,
-    @SerializedName("heart_disease") val heartDisease: Float,
+    @SerializedName("gender") val gender: Int,
+    @SerializedName("age") val age: Int,
+    @SerializedName("hypertension") val hypertension: Int,
+    @SerializedName("heart_disease") val heartDisease: Int,
     @SerializedName("bmi") val bmi: Float,
     @SerializedName("HbA1c_level") val HbA1cLevel: Float,
-    @SerializedName("blood_glucose_level") val bloodGlucoseLevel: Float
+    @SerializedName("blood_glucose_level") val bloodGlucoseLevel: Int
 )
 

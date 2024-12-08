@@ -64,7 +64,8 @@ class FormFragment : Fragment() {
     }
 
     private fun observerFormsByUserId(userId: String) {
-        formViewModel.findFormByUserId(userId).observe(viewLifecycleOwner) { result ->
+        formViewModel.findFormByUserId(userId)
+        formViewModel.formResult.observe(viewLifecycleOwner) { result ->
             handleResult(result)
         }
     }

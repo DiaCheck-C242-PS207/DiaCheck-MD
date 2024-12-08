@@ -1,6 +1,10 @@
 package com.project.diacheck.data.remote.retrofit
 
 import com.project.diacheck.data.local.entity.HistoryEntity
+import com.project.diacheck.data.remote.request.CreateHistoryRequest
+import com.project.diacheck.data.remote.request.LoginRequest
+import com.project.diacheck.data.remote.request.RegisterRequest
+import com.project.diacheck.data.remote.response.AddHistoryResponse
 import com.project.diacheck.data.remote.response.DetailHistoriesResponse
 import com.project.diacheck.data.remote.response.DetailNewsResponse
 import com.project.diacheck.data.remote.response.ListFormItem
@@ -24,19 +28,14 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
-    @FormUrlEncoded
-    @POST("register")
+    @POST("users/register")
     suspend fun register(
-        @Field("name") name: String,
-        @Field("email") email: String,
-        @Field("password") password: String
+        @Body request: RegisterRequest
     ): SignupResponse
 
-    @FormUrlEncoded
-    @POST("login")
+    @POST("users/login")
     suspend fun login(
-        @Field("email") email: String,
-        @Field("password") password: String
+        @Body request: LoginRequest
     ): LoginResponse
 
 // Get Artikel or News
@@ -62,12 +61,17 @@ interface ApiService {
     @POST("history/submit")
     suspend fun submitHistory(@Body formItem: SubmitFormItem): Response<ListFormItem>
 
-    @GET("histories")
+    @GET("histories/getHistory/{id}")
     suspend fun getFormById(
-        @Query("user_id") userId: String
+        @Path("id") userId: String
     ): List<HistoryEntity>
 
-    @GET("histories/{id}")
+    @POST("histories/create")
+    suspend fun createHistory(
+        @Body requestBody: CreateHistoryRequest
+    ): AddHistoryResponse
+
+    @GET("histories/getHistory/{id}")
     suspend fun getHistoryById(@Path("id") id: Int): Response<DetailHistoriesResponse>
 
     @POST("/predictions")
