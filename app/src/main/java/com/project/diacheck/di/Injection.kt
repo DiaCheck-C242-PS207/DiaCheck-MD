@@ -23,10 +23,8 @@ object Injection {
     }
 
     fun provideNewsRepository(context: Context): NewsRepository {
-        val database = DiacheckDatabase.getInstance(context)
-        val newsDao = database.newsDao()
         val pref = UserPreference.getInstance(context.dataStore)
         val apiService = ApiConfig.getApiService(pref)
-        return NewsRepository.getInstance(apiService, newsDao)
+        return NewsRepository.getInstance(apiService)
     }
 }

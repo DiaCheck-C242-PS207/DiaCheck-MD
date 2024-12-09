@@ -15,7 +15,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.imageview.ShapeableImageView
 import com.project.diacheck.R
 import com.project.diacheck.databinding.FragmentProfileBinding
@@ -27,22 +26,11 @@ import com.project.diacheck.data.Result
 import com.project.diacheck.data.local.settings.ThemePreference
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import okhttp3.MediaType
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import java.io.File
 import android.Manifest
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
 import android.content.pm.PackageManager
-import android.os.Build
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.work.*
-import com.project.diacheck.NotificationPermissionUtil
 import com.project.diacheck.ui.worker.NotificationWorker
 import java.util.concurrent.TimeUnit
 
@@ -124,8 +112,19 @@ class ProfileFragment : Fragment() {
         }
 
         binding.editPhotoButton.setOnClickListener {
-            showPhotoOptionsDialog()
+            val dialog = EditProfileDialogFragment()
+            dialog.setOnSaveListener { newName, newImageUri ->
+                if (newImageUri != null) {
+                    handleImageFromUri(newImageUri)
+                }
+                binding.name.text = newName
+                lifecycleScope.launch {
+                    updateUserProfile()
+                }
+            }
+            dialog.show(parentFragmentManager, "EditProfileDialog")
         }
+
 
         logoutButton.setOnClickListener {
             viewModel.logout()
@@ -133,6 +132,15 @@ class ProfileFragment : Fragment() {
         }
 
         return view
+    }
+
+    private fun handleImageFromUri(uri: Uri?) {
+        uri?.let { imageUri ->
+            lifecycleScope.launch {
+                val file = uriToFile(imageUri, requireContext())
+                val reducedFile = file.reduceFileImage()
+            }
+        }
     }
 
     private fun requestNotificationPermission() {
@@ -154,85 +162,33 @@ class ProfileFragment : Fragment() {
     }
 
 
-    private val launcherGallery = registerForActivityResult(
-        ActivityResultContracts.PickVisualMedia()
-    ) { uri: Uri? ->
-        if (uri != null) {
-            binding.profileUser.setImageURI(uri)
-            viewModel.setCurrentImageUri(uri)
-            handleImageFromUri(uri)
-        }
-    }
+    private suspend fun updateUserProfile() {
+        val userId: Unit = viewModel.getUserSession().collectLatest { user -> user.id_users }
+        val name = binding.name.text.toString()
+        val file = uriToFile(viewModel.currentImageUri.value!!, requireContext())
 
-    private val launcherIntentCamera = registerForActivityResult(
-        ActivityResultContracts.TakePicture()
-    ) { isSuccess ->
-        if (isSuccess) {
-            val uri = viewModel.currentImageUri.value
-            if (uri != null) {
-                binding.profileUser.setImageURI(uri)
-                handleImageFromUri(uri)
-            }
-        } else {
-            viewModel.setCurrentImageUri(null)
-        }
-    }
-
-
-    private fun handleImageFromUri(uri: Uri?) {
-        uri?.let { imageUri ->
-            lifecycleScope.launch {
-                val file = uriToFile(imageUri, requireContext())
-                val reducedFile = file.reduceFileImage()
-                sendImageToApi(reducedFile)
-            }
-        }
-    }
-
-    private fun sendImageToApi(file: File) {
-        viewModel.uploadImage(file).observe(viewLifecycleOwner) { result ->
+        viewModel.updateUser(userId , name,  file).observe(viewLifecycleOwner) { result ->
             when (result) {
-                is Result.Loading -> {
-                    showLoading(true)
-                }
+                is Result.Loading -> showLoading(true)
                 is Result.Success -> {
                     showLoading(false)
-                    Toast.makeText(requireContext(), "Upload Successful", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Profile Updated: ${result.data.message}", Toast.LENGTH_SHORT).show()
                 }
                 is Result.Error -> {
                     showLoading(false)
-                    Toast.makeText(requireContext(), "Upload Failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Error: ${result.error}", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
+
 
     private fun showLoading(isLoading: Boolean) {
         binding.linearProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
 
-    private fun startCamera() {
-        viewModel.setCurrentImageUri(getImageUri(requireContext()))
-        launcherIntentCamera.launch(viewModel.currentImageUri.value!!)
-    }
 
-    private fun startGallery() {
-        launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-    }
-
-    private fun showPhotoOptionsDialog() {
-        val options = arrayOf("Take Photo", "Choose from Gallery")
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Select Photo Option")
-            .setItems(options) { _, which ->
-                when (which) {
-                    0 -> startCamera()
-                    1 -> startGallery()
-                }
-            }
-            .show()
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

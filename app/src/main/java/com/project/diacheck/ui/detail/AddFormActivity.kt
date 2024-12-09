@@ -11,9 +11,7 @@ import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.project.diacheck.R
 import com.project.diacheck.data.Result
@@ -136,7 +134,7 @@ class AddFormActivity : AppCompatActivity() {
                             val probability = response.data?.probability ?: 0.0
                             val formattedProbability = String.format("%.2f", probability)
                             val historyMessage = "${response.data?.message} Dengan tingkat kemungkinan $formattedProbability%"
-
+                            val prediction = response.data?.prediction ?: 0
                             intent.putExtra("input_age", age)
                             intent.putExtra("input_gender", gender)
                             intent.putExtra("input_hypertension", hypertension)
@@ -144,7 +142,7 @@ class AddFormActivity : AppCompatActivity() {
                             intent.putExtra("input_bmi", bmi)
                             intent.putExtra("input_hbA1c", hbA1c)
                             intent.putExtra("input_bloodGlucose", bloodGlucose)
-                            intent.putExtra("prediction", response.data?.prediction)
+                            intent.putExtra("prediction", prediction)
                             intent.putExtra("prediction_message", historyMessage)
                             intent.putExtra("prediction_probability", probability)
 
@@ -158,7 +156,7 @@ class AddFormActivity : AppCompatActivity() {
                                 bmi = bmi,
                                 hbA1c = hbA1c,
                                 blood_glucose = bloodGlucose,
-                                result = response.data?.prediction ?: 0
+                                result = prediction
                             )
 
                             viewModel.createHistory(request)

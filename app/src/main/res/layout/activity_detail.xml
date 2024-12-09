@@ -33,6 +33,7 @@
         app:cardCornerRadius="8dp"
         app:cardElevation="4dp"
         app:strokeWidth="2dp"
+        app:cardBackgroundColor="@color/white_1"
         app:strokeColor="@color/gray">
 
         <LinearLayout
@@ -150,15 +151,6 @@
                 android:id="@+id/textViewMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Penjelasan"
-                android:textSize="16sp"
-                android:layout_marginTop="8dp" />
-
-            <TextView
-                android:id="@+id/textViewProbability"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Penjelasan"
                 android:textSize="16sp"
                 android:layout_marginTop="8dp" />
         </LinearLayout>

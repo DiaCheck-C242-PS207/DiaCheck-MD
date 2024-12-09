@@ -19,8 +19,9 @@ class FormRepository private constructor(
     private val apiService: ApiService
 ) {
 
-    suspend fun getFormById(userId: String): List<HistoryEntity> {
-        return apiService.getFormById(userId)
+    suspend fun getFormById(userId: Int): List<ListFormItem> {
+        val response = apiService.getFormById(userId)
+        return response.listHistory?.filterNotNull() ?: emptyList()
     }
 
     suspend fun createHistory(request: CreateHistoryRequest): AddHistoryResponse {

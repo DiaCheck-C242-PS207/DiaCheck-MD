@@ -14,6 +14,7 @@ import com.project.diacheck.data.remote.repository.UserRepository
 import com.project.diacheck.data.remote.request.CreateHistoryRequest
 import com.project.diacheck.data.remote.response.AddHistoryResponse
 import com.project.diacheck.data.remote.response.DetailHistoriesResponse
+import com.project.diacheck.data.remote.response.ListFormItem
 import com.project.diacheck.data.remote.response.PredictionResponse
 import com.project.diacheck.data.remote.response.SubmitFormItem
 import com.project.diacheck.data.remote.retrofit.ApiML
@@ -23,12 +24,12 @@ class FormViewModel(
     private val formRepository: FormRepository,
     private val userRepository: UserRepository
 ) : ViewModel() {
-    private val _formResult = MutableLiveData<Result<List<HistoryEntity>>>()
-    val formResult: LiveData<Result<List<HistoryEntity>>> get() = _formResult
+    private val _formResult = MutableLiveData<Result<List<ListFormItem>>>()
+    val formResult: LiveData<Result<List<ListFormItem>>> get() = _formResult
     private val _createHistoryResult = MutableLiveData<Result<AddHistoryResponse>>()
     val createHistoryResult: LiveData<Result<AddHistoryResponse>> get() = _createHistoryResult
 
-    fun findFormByUserId(userId: String) {
+    fun findFormByUserId(userId: Int) {
         viewModelScope.launch {
             _formResult.postValue(Result.Loading)
             try {

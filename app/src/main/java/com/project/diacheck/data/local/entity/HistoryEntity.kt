@@ -17,16 +17,16 @@ data class HistoryEntity(
     val history: String,
 
     @field:ColumnInfo(name = "gender")
-    val gender: Float,
+    val gender: Int,
 
     @field:ColumnInfo(name = "hypertension")
-    val hypertension: Float,
+    val hypertension: Int,
 
     @field:ColumnInfo(name = "heart_disease")
-    val heart_disease: Float,
+    val heart_disease: Int,
 
     @field:ColumnInfo(name = "age")
-    val age: Float,
+    val age: Int,
 
     @field:ColumnInfo(name = "bmi")
     val bmi: Float,
@@ -35,7 +35,7 @@ data class HistoryEntity(
     val hbA1c: Float,
 
     @field:ColumnInfo(name = "blood_glucose")
-    val blood_glucose: Float,
+    val blood_glucose: Int,
 
     @field:ColumnInfo(name = "result")
     val result: Int,

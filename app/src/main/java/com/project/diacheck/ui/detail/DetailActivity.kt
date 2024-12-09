@@ -45,11 +45,10 @@ class DetailActivity : AppCompatActivity() {
 
         val prediction = intent.getIntExtra("prediction", -1)
         val predictionMessage = intent.getStringExtra("prediction_message")
-        val predictionProbability = intent.getFloatExtra("prediction_probability", 0f)
+        val predictionProbability = intent.getFloatExtra("prediction_probability", -1f)
 
         val textViewPrediction = findViewById<TextView>(R.id.textViewPrediction)
         val textViewMessage = findViewById<TextView>(R.id.textViewMessage)
-        val textViewProbability = findViewById<TextView>(R.id.textViewProbability)
         val cardPrediction = findViewById<MaterialCardView>(R.id.cardPrediction)
 
         val predictionResult = if (prediction == 1) {

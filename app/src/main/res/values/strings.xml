@@ -73,4 +73,6 @@
     <string name="walked_8_000_steps">Walked 8,000 steps</string>
     <string name="stay_healthy">Stay Healthy!</string>
     <string name="text_notification">Your health matters! Check your diabetes risk regularly</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancl</string>
 </resources>

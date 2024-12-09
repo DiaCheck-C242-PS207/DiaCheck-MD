@@ -13,9 +13,9 @@ data class History(
     val hypertension: Int,
     val heart_disease: Int,
     val age: Int,
-    val bmi: Double,
-    val hbA1c: Double,
-    val blood_glucose: Double,
+    val bmi: Float,
+    val hbA1c: Float,
+    val blood_glucose: Int,
     val result: Int,
     val created_at: String,
     val updated_at: String

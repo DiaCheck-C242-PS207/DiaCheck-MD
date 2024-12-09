@@ -108,24 +108,3 @@ fun rotateImage(source: Bitmap, angle: Float): Bitmap? {
         source, 0, 0, source.width, source.height, matrix, true
     )
 }
-
-object NotificationPermissionUtil {
-
-    fun isNotificationPermissionGranted(context: Context): Boolean {
-        return ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.POST_NOTIFICATIONS
-        ) == PermissionChecker.PERMISSION_GRANTED
-    }
-
-    fun requestNotificationPermission(
-        launcher: ActivityResultLauncher<String>,
-        context: Context
-    ) {
-        if (!isNotificationPermissionGranted(context)) {
-            launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
-        } else {
-            Toast.makeText(context, "Permission already granted!", Toast.LENGTH_SHORT).show()
-        }
-    }
-}

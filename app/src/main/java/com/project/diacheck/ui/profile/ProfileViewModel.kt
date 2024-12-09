@@ -8,7 +8,6 @@ import com.project.diacheck.data.preference.UserModel
 import com.project.diacheck.data.remote.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import okhttp3.MultipartBody
 import java.io.File
 
 class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
@@ -28,5 +27,10 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
         _currentImageUri.value = uri
     }
 
-    fun uploadImage(imageFile: File) = repository.uploadImage(imageFile)
+    fun updateUser(
+        userId: Unit,
+        name: String,
+        imageFile: File
+    ) = repository.updateUser(userId, name, imageFile)
+
 }

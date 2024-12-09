@@ -6,16 +6,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.project.diacheck.R
-import com.project.diacheck.data.local.entity.NewsEntity
-//import com.project.diacheck.data.local.entity.NewsEntity
+import com.project.diacheck.data.remote.response.ListNewsItem
 import com.project.diacheck.databinding.ItemNewsBinding
 
 class NewsAdapter(
-    private val onItemClick: (NewsEntity) -> Unit
-) : ListAdapter<NewsEntity, NewsAdapter.NewsViewHolder>(DIFF_CALLBACK) {
+    private val onItemClick: (ListNewsItem) -> Unit
+) : ListAdapter<ListNewsItem, NewsAdapter.NewsViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder {
         val binding = ItemNewsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -30,21 +26,12 @@ class NewsAdapter(
 
     class NewsViewHolder(
         private val binding: ItemNewsBinding,
-        private val onItemClick: (NewsEntity) -> Unit
+        private val onItemClick: (ListNewsItem) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(news: NewsEntity) {
+        fun bind(news: ListNewsItem) {
             binding.tvItemName.text = news.title
-
-            Glide.with(itemView.context)
-                .load(news.thumbnail)
-                .apply(
-                    RequestOptions()
-                        .placeholder(R.drawable.placeholder)
-                        .error(R.drawable.placeholder)
-                        .fitCenter()
-                )
-                .into(binding.imgItemPhoto)
+            binding.ivItemDescription.text = news.content
 
             itemView.setOnClickListener {
                 onItemClick(news)
@@ -53,16 +40,16 @@ class NewsAdapter(
     }
 
     companion object {
-        val DIFF_CALLBACK: DiffUtil.ItemCallback<NewsEntity> =
-            object : DiffUtil.ItemCallback<NewsEntity>() {
-                override fun areItemsTheSame(oldItem: NewsEntity, newItem: NewsEntity): Boolean {
+        val DIFF_CALLBACK: DiffUtil.ItemCallback<ListNewsItem> =
+            object : DiffUtil.ItemCallback<ListNewsItem>() {
+                override fun areItemsTheSame(oldItem: ListNewsItem, newItem: ListNewsItem): Boolean {
                     return oldItem.id == newItem.id
                 }
 
                 @SuppressLint("DiffUtilEquals")
                 override fun areContentsTheSame(
-                    oldItem: NewsEntity,
-                    newItem: NewsEntity
+                    oldItem: ListNewsItem,
+                    newItem: ListNewsItem
                 ): Boolean {
                     return oldItem == newItem
                 }

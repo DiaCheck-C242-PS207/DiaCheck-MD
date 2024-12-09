@@ -9,12 +9,12 @@ import androidx.core.text.HtmlCompat
 import com.project.diacheck.R
 import com.project.diacheck.data.Result
 import com.project.diacheck.data.local.entity.NewsEntity
+import com.project.diacheck.data.remote.response.ListNewsItem
 import com.project.diacheck.databinding.ActivityDetailNewsBinding
 
 class DetailNewsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailNewsBinding
     private lateinit var newsModel: NewsViewModel
-    private lateinit var detailView: NewsEntity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,13 +37,16 @@ class DetailNewsActivity : AppCompatActivity() {
             title = getString(R.string.detail_news)
         }
 
-        val newsId = intent.getStringExtra(EXTRA_NEWS_ID)
-        if (newsId != null) {
+        val newsId = intent.getIntExtra(EXTRA_NEWS_ID, -1)
+        if (newsId != -1) {
             observeNewsDetails(newsId)
+        } else {
+            Toast.makeText(this, "Invalid news ID", Toast.LENGTH_SHORT).show()
         }
+
     }
 
-    private fun observeNewsDetails(newsId: String) {
+    private fun observeNewsDetails(newsId: Int) {
         newsModel.getNewsById(newsId).observe(this) { result ->
             when (result) {
                 is Result.Loading -> {
@@ -53,7 +56,6 @@ class DetailNewsActivity : AppCompatActivity() {
                 is Result.Success -> {
                     binding.linearProgressBar.visibility = View.GONE
                     val news = result.data
-                    detailView = news
                     showNewsDetails(news)
                 }
 
@@ -65,9 +67,9 @@ class DetailNewsActivity : AppCompatActivity() {
         }
     }
 
-    private fun showNewsDetails(news: NewsEntity) {
+    private fun showNewsDetails(news: ListNewsItem) {
         binding.tvTitle.text = news.title
-        binding.tvBody.text = HtmlCompat.fromHtml(news.body, HtmlCompat.FROM_HTML_MODE_LEGACY)
+        binding.tvBody.text = HtmlCompat.fromHtml(news.content, HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
 
     companion object {

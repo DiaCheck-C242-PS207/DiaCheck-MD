@@ -7,14 +7,14 @@ data class FormResponse(
     @field:SerializedName("message")
     val message: String,
 
-    @field:SerializedName("listHistory")
+    @field:SerializedName("data")
     val listHistory: List<ListFormItem?>? = null
 )
 
 data class ListFormItem(
 
     @field:SerializedName("id_history")
-    val id: Int? = null,
+    val id_history: Int? = null,
 
     @field:SerializedName("id_users")
     val id_users: Int? = null,
@@ -41,7 +41,7 @@ data class ListFormItem(
     val hbA1c: Float,
 
     @field:SerializedName("blood_glucose")
-    val blood_glucose: Float,
+    val blood_glucose: Int,
 
     @field:SerializedName("result")
     val result: Int? = null,

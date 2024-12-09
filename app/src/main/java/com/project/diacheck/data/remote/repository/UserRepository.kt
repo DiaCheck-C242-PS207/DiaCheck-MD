@@ -17,8 +17,8 @@ import kotlinx.coroutines.flow.Flow
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.HttpException
-import retrofit2.Response
 import java.io.File
 
 class UserRepository private constructor(
@@ -89,33 +89,30 @@ class UserRepository private constructor(
         userPreference.logout()
     }
 
-    fun uploadImage(imageFile: File): LiveData<Result<UploadProfileResponse>> = liveData {
+    fun updateUser(
+        userId: Unit,
+        name: String,
+        imageFile: File
+    ): LiveData<Result<UploadProfileResponse>> = liveData {
         emit(Result.Loading)
+
         val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
-        val multipartBody = MultipartBody.Part.createFormData(
-            "photo",
-            imageFile.name,
-            requestImageFile
-        )
+        val avatar = MultipartBody.Part.createFormData("avatar", imageFile.name, requestImageFile)
+
+        val nameBody = name.toRequestBody("text/plain".toMediaType())
+
         try {
-            val response = apiService.uploadImage(multipartBody)
+            val response = apiService.updateUser(userId, nameBody, avatar)
             emit(Result.Success(response))
         } catch (e: HttpException) {
-            Log.e("uploadProfile", "HTTP Exception: ${e.message}")
-            try {
-                val errorResponse = e.response()?.errorBody()?.string()
-                val gson = Gson()
-                val parsedError = gson.fromJson(errorResponse, UploadProfileResponse::class.java)
-                emit(Result.Success(parsedError))
-            } catch (e: Exception) {
-                Log.e("uploadProfile", "Error parsing error response: ${e.message}")
-                emit(Result.Error("Error: ${e.message}"))
-            }
+            Log.e("updateUser", "HTTP Exception: ${e.message}")
+            emit(Result.Error("HTTP Error: ${e.message()}"))
         } catch (e: Exception) {
-            Log.e("uploadProfile", "General Exception: ${e.message}")
-            emit(Result.Error(e.message.toString()))
+            Log.e("updateUser", "General Exception: ${e.message}")
+            emit(Result.Error("Error: ${e.message}"))
         }
     }
+
 
     companion object {
         @Volatile

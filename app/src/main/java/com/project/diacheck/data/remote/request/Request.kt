@@ -1,5 +1,7 @@
 package com.project.diacheck.data.remote.request
 
+import com.project.diacheck.data.local.entity.HistoryEntity
+
 data class LoginRequest(
     val email: String,
     val password: String
@@ -21,4 +23,3 @@ data class CreateHistoryRequest(
     val blood_glucose: Int,
     val result: Int?
 )
-

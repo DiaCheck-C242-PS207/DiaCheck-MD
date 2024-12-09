@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.diacheck.data.Result
 import com.project.diacheck.data.local.entity.NewsEntity
+import com.project.diacheck.data.remote.response.ListNewsItem
 import com.project.diacheck.databinding.FragmentNewsBinding
 import com.project.diacheck.ui.ViewModelFactory
 import com.project.diacheck.ui.adapter.NewsAdapter
@@ -34,38 +36,50 @@ class NewsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        binding.searchView.isIconified = false
         observerNews()
         setupRecylerView()
         setupSearchView()
     }
 
     private fun setupSearchView() {
+
         binding.searchView.apply {
-            visibility = View.VISIBLE
             setOnQueryTextListener(object :
-                androidx.appcompat.widget.SearchView.OnQueryTextListener {
+                SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
-//                    if (query != null) {
-//                        observerNews()
-//                    }
-                    observeSearchNews(query.orEmpty())
+                    if (!query.isNullOrEmpty()) {
+                        observeSearchNews(query)
+                    }
+                    clearFocus()
                     return true
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    observeSearchNews(newText.orEmpty())
                     return true
                 }
             })
         }
+
     }
 
     private fun observeSearchNews(query: String) {
         newsViewModel.searchNews(query).observe(viewLifecycleOwner) { result ->
-            handleResult(result)
+            when (result) {
+                is Result.Loading -> showLoading(true)
+                is Result.Success -> {
+                    showLoading(false)
+                    updateNewsList(result.data)
+                }
+
+                is Result.Error -> {
+                    showLoading(false)
+                    showError()
+                }
+            }
         }
     }
+
 
     private fun setupRecylerView() {
         newsAdapter = NewsAdapter { navigateToDetailNews(it) }
@@ -75,7 +89,7 @@ class NewsFragment : Fragment() {
         }
     }
 
-    private fun navigateToDetailNews(news: NewsEntity) {
+    private fun navigateToDetailNews(news: ListNewsItem) {
         val intent = Intent(requireContext(), DetailNewsActivity::class.java).apply {
             putExtra(DetailNewsActivity.EXTRA_NEWS_ID, news.id.toString())
         }
@@ -84,23 +98,19 @@ class NewsFragment : Fragment() {
 
     private fun observerNews() {
         newsViewModel.findNews().observe(viewLifecycleOwner) { result ->
-            handleResult(result)
-        }
-    }
+            when (result) {
+                is Result.Loading -> showLoading(true)
+                is Result.Success -> {
+                    showLoading(false)
+                    updateNewsList(result.data)
+                }
 
-    private fun handleResult(result: Result<List<NewsEntity>>) {
-        when (result) {
-            is Result.Loading -> showLoading(true)
-            is Result.Success -> {
-                showLoading(false)
-                updateNewsList(result.data)
+                is Result.Error -> showError()
             }
-
-            is Result.Error -> showError()
         }
     }
 
-    private fun updateNewsList(newsList: List<NewsEntity>) {
+    private fun updateNewsList(newsList: List<ListNewsItem>) {
         if (newsList.isEmpty()) {
             binding.tvNoEvent.visibility = View.VISIBLE
             binding.rvNews.visibility = View.GONE

@@ -1,12 +1,12 @@
 package com.project.diacheck.data.remote.response
 
-import com.google.gson.annotations.SerializedName
-
 data class UploadProfileResponse (
+    val message: String,
+    val data: User
+)
 
-    @field:SerializedName("error")
-    val error: Boolean,
-
-    @field:SerializedName("message")
-    val message: String
+data class User(
+    val name: String,
+    val email: String,
+    val password: String
 )
