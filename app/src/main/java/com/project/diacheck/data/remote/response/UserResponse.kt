@@ -1,13 +1,13 @@
 package com.project.diacheck.data.remote.response
 
-data class UploadProfileResponse (
+data class UserResponse(
     val message: String,
-    val data: User
+    val data: List<UserData>?
 )
 
-data class User(
-    val avatar: String?,
+data class UserData(
+    val id_users: Int,
     val name: String,
     val email: String,
-    val password: String
+    val avatar: String
 )

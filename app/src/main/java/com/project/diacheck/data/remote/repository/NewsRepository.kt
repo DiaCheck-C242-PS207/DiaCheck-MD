@@ -1,13 +1,10 @@
 package com.project.diacheck.data.remote.repository
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.liveData
-import androidx.lifecycle.map
 import com.project.diacheck.data.Result
-import com.project.diacheck.data.local.entity.NewsEntity
-import com.project.diacheck.data.local.room.NewsDao
 import com.project.diacheck.data.remote.response.ListNewsItem
+import com.project.diacheck.data.remote.response.News
 import com.project.diacheck.data.remote.retrofit.ApiService
 
 class NewsRepository private constructor(
@@ -24,26 +21,25 @@ class NewsRepository private constructor(
         }
     }
 
-    fun searchNews(query: String): LiveData<Result<List<ListNewsItem>>> = liveData {
+    fun searchNews(query: String): LiveData<Result<News>> = liveData {
         emit(Result.Loading)
         try {
             val response = apiService.searchNews(query)
-            val listNews = response.data
-            emit(Result.Success(listNews ?: emptyList()))
+            emit(Result.Success(response.data))
         } catch (e: Exception) {
             emit(Result.Error(e.message.toString()))
         }
     }
 
-    fun getDetailNews(newsId: Int): LiveData<Result<ListNewsItem>> = liveData {
+    fun getDetailNews(newsId: Int): LiveData<Result<News>> = liveData {
         emit(Result.Loading)
         try {
             val response = apiService.getDetailNews(newsId)
-            val newsDetail = response.listNews
+            val newsDetail = response.data
             if (newsDetail != null) {
                 emit(Result.Success(newsDetail))
             } else {
-                emit(Result.Error("News detail not found"))
+                emit(Result.Error("News not found"))
             }
         } catch (e: Exception) {
             emit(Result.Error(e.message.toString()))

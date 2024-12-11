@@ -37,7 +37,6 @@
         android:layout_marginTop="24dp"
         android:text="@string/hello"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/dotsIndicator" />
 
@@ -49,8 +48,7 @@
         android:text="@string/name"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/helloTextView"
+        app:layout_constraintStart_toEndOf="@+id/helloTextView"
         app:layout_constraintTop_toBottomOf="@id/dotsIndicator" />
 
     <TextView

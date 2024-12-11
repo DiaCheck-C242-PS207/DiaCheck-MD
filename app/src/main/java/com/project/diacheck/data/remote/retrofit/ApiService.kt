@@ -4,6 +4,7 @@ import com.project.diacheck.data.remote.request.CreateHistoryRequest
 import com.project.diacheck.data.remote.request.LoginRequest
 import com.project.diacheck.data.remote.request.RegisterRequest
 import com.project.diacheck.data.remote.response.AddHistoryResponse
+import com.project.diacheck.data.remote.response.DetailNewsResponse
 import com.project.diacheck.data.remote.response.FormResponse
 import com.project.diacheck.data.remote.response.LoginResponse
 import com.project.diacheck.data.remote.response.NewsResponse
@@ -11,9 +12,12 @@ import com.project.diacheck.data.remote.response.PredictionResponse
 import com.project.diacheck.data.remote.response.SignupResponse
 import com.project.diacheck.data.remote.response.SubmitFormItem
 import com.project.diacheck.data.remote.response.UploadProfileResponse
+import com.project.diacheck.data.remote.response.UserResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -35,19 +39,24 @@ interface ApiService {
     @GET("articles/getAll")
     suspend fun getNews(): NewsResponse
 
-    @GET("articles/getArticles/{id}")
-    suspend fun getDetailNews(@Path("id") newsId: Int): NewsResponse
+    @GET("articles/getArticles/{id_article}")
+    suspend fun getDetailNews(@Path("id_article") newsId: Int): DetailNewsResponse
 
     @GET("articles/{title}")
-    suspend fun searchNews(@Path("title") title: String): NewsResponse
+    suspend fun searchNews(@Path("title") title: String): DetailNewsResponse
 
     @Multipart
     @PUT("users/update/{id}")
-    fun updateUser(
-        @Path("id") userId: Unit,
-        @Part("name") name: RequestBody,
-        @Part avatar: MultipartBody.Part
-    ): UploadProfileResponse
+    suspend fun updateUser(
+        @Path("id") userId: Int,
+        @Part avatar: MultipartBody.Part?,
+        @Part("name") name: RequestBody?,
+        @Part("email") email: RequestBody?,
+        @Part("password") password: RequestBody?
+    ): Response<UploadProfileResponse>
+
+    @GET("users/getUser/{id}")
+    suspend fun getUserById(@Path("id") id: Int): Response<UserResponse>
 
     @GET("histories/getHistory/{id}")
     suspend fun getFormById(
@@ -58,6 +67,12 @@ interface ApiService {
     suspend fun createHistory(
         @Body requestBody: CreateHistoryRequest
     ): AddHistoryResponse
+
+    @DELETE("histories/delete/{id}")
+    suspend fun deleteHistory(
+        @Path("id") id: Int?
+    ): Response<Unit>
+
 
     @POST("/predictions")
     suspend fun predict(@Body formItem: SubmitFormItem): PredictionResponse

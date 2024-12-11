@@ -6,9 +6,12 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "articles")
 data class NewsEntity(
-    @field:ColumnInfo(name = "id")
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    @field:ColumnInfo(name = "id_article")
+    @field:PrimaryKey
+    val id: Int,
+
+    @field:ColumnInfo(name = "id_users")
+    val id_users: Int,
 
     @field:ColumnInfo(name = "thumbnail")
     val thumbnail: String,
@@ -18,4 +21,11 @@ data class NewsEntity(
 
     @field:ColumnInfo(name = "body")
     val body: String,
+
+    @field:ColumnInfo(name = "created_at")
+    val created_at: String,
+
+    @field:ColumnInfo(name = "updated_at")
+    val updated_at: String
+
 )

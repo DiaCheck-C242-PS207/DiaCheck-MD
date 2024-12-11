@@ -1,19 +1,9 @@
 package com.project.diacheck.data.remote.repository
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.liveData
-import com.google.gson.Gson
-import com.project.diacheck.data.Result
-import com.project.diacheck.data.local.entity.HistoryEntity
 import com.project.diacheck.data.remote.request.CreateHistoryRequest
 import com.project.diacheck.data.remote.response.AddHistoryResponse
-import com.project.diacheck.data.remote.response.DetailHistoriesResponse
 import com.project.diacheck.data.remote.response.ListFormItem
-import com.project.diacheck.data.remote.response.SubmitFormItem
 import com.project.diacheck.data.remote.retrofit.ApiService
-import retrofit2.HttpException
-import retrofit2.Response
 
 class FormRepository private constructor(
     private val apiService: ApiService
@@ -26,6 +16,10 @@ class FormRepository private constructor(
 
     suspend fun createHistory(request: CreateHistoryRequest): AddHistoryResponse {
         return apiService.createHistory(request)
+    }
+
+    suspend fun deleteHistory(id: Int?) {
+        apiService.deleteHistory(id)
     }
 
     companion object {

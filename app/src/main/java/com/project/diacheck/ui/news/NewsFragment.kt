@@ -2,6 +2,7 @@ package com.project.diacheck.ui.news
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.diacheck.data.Result
-import com.project.diacheck.data.local.entity.NewsEntity
 import com.project.diacheck.data.remote.response.ListNewsItem
 import com.project.diacheck.databinding.FragmentNewsBinding
 import com.project.diacheck.ui.ViewModelFactory
@@ -69,9 +69,8 @@ class NewsFragment : Fragment() {
                 is Result.Loading -> showLoading(true)
                 is Result.Success -> {
                     showLoading(false)
-                    updateNewsList(result.data)
+                    result.data?.let { newsAdapter.submitSingleItem(it) } ?: showError()
                 }
-
                 is Result.Error -> {
                     showLoading(false)
                     showError()
@@ -79,7 +78,6 @@ class NewsFragment : Fragment() {
             }
         }
     }
-
 
     private fun setupRecylerView() {
         newsAdapter = NewsAdapter { navigateToDetailNews(it) }
@@ -90,11 +88,16 @@ class NewsFragment : Fragment() {
     }
 
     private fun navigateToDetailNews(news: ListNewsItem) {
-        val intent = Intent(requireContext(), DetailNewsActivity::class.java).apply {
-            putExtra(DetailNewsActivity.EXTRA_NEWS_ID, news.id.toString())
+        if (news.id_article > 0) {
+            val intent = Intent(requireContext(), DetailNewsActivity::class.java).apply {
+                putExtra(DetailNewsActivity.EXTRA_NEWS_ID, news.id_article)
+            }
+            startActivity(intent)
+        } else {
+            Log.e("NewsFragment", "Invalid news ID: ${news.id_article}")
         }
-        startActivity(intent)
     }
+
 
     private fun observerNews() {
         newsViewModel.findNews().observe(viewLifecycleOwner) { result ->
@@ -102,22 +105,13 @@ class NewsFragment : Fragment() {
                 is Result.Loading -> showLoading(true)
                 is Result.Success -> {
                     showLoading(false)
-                    updateNewsList(result.data)
+                    result.data.let { newsAdapter.submitList(it) } ?: showError()
                 }
-
-                is Result.Error -> showError()
+                is Result.Error -> {
+                    showLoading(false)
+                    showError()
+                }
             }
-        }
-    }
-
-    private fun updateNewsList(newsList: List<ListNewsItem>) {
-        if (newsList.isEmpty()) {
-            binding.tvNoEvent.visibility = View.VISIBLE
-            binding.rvNews.visibility = View.GONE
-        } else {
-            binding.tvNoEvent.visibility = View.GONE
-            binding.rvNews.visibility = View.VISIBLE
-            newsAdapter.submitList(newsList)
         }
     }
 

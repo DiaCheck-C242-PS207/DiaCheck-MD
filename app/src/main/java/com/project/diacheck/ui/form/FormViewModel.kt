@@ -1,23 +1,17 @@
 package com.project.diacheck.ui.form
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.project.diacheck.data.Result
-import com.project.diacheck.data.local.entity.HistoryEntity
 import com.project.diacheck.data.preference.UserModel
 import com.project.diacheck.data.remote.repository.FormRepository
 import com.project.diacheck.data.remote.repository.UserRepository
 import com.project.diacheck.data.remote.request.CreateHistoryRequest
 import com.project.diacheck.data.remote.response.AddHistoryResponse
-import com.project.diacheck.data.remote.response.DetailHistoriesResponse
 import com.project.diacheck.data.remote.response.ListFormItem
-import com.project.diacheck.data.remote.response.PredictionResponse
-import com.project.diacheck.data.remote.response.SubmitFormItem
-import com.project.diacheck.data.remote.retrofit.ApiML
 import kotlinx.coroutines.launch
 
 class FormViewModel(
@@ -56,4 +50,15 @@ class FormViewModel(
             }
         }
     }
+
+    fun deleteHistory(id: Int?) {
+        viewModelScope.launch {
+            try {
+                formRepository.deleteHistory(id)
+            } catch (e: Exception) {
+                // Tangani kesalahan
+            }
+        }
+    }
+
 }

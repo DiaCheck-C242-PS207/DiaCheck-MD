@@ -13,11 +13,12 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class FormAdapter(
-    private val onItemClick: (ListFormItem) -> Unit
+    private val onItemClick: (ListFormItem) -> Unit,
+    private val onDeleteClick: (ListFormItem) -> Unit
 ) : ListAdapter<ListFormItem, FormAdapter.FormViewHolder>(DIFF_CALLBACK) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FormAdapter.FormViewHolder {
         val binding = ItemCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return FormViewHolder(binding, onItemClick)
+        return FormViewHolder(binding, onItemClick, onDeleteClick)
     }
 
     override fun onBindViewHolder(holder: FormViewHolder, position: Int) {
@@ -28,7 +29,8 @@ class FormAdapter(
 
     class FormViewHolder(
         private val binding: ItemCardBinding,
-        private val onItemClick: (ListFormItem) -> Unit
+        private val onItemClick: (ListFormItem) -> Unit,
+        private val onDeleteClick: (ListFormItem) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(form: ListFormItem) {
             binding.ivItemName.text = formatDate(form.updated_at.toString())
@@ -36,6 +38,7 @@ class FormAdapter(
             itemView.setOnClickListener {
                 onItemClick(form)
             }
+            binding.btnAdd.setOnClickListener { onDeleteClick(form) }
         }
 
         fun formatDate(inputDate: String): String {

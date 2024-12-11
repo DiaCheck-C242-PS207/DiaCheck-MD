@@ -50,9 +50,9 @@ class HomeFragment : Fragment() {
         imageSlider = binding.imageSlider
 
         val images = listOf(
-            R.drawable.ic_google,
-            R.drawable.diacheck_black,
-            R.drawable.dia_light
+            R.drawable.diabetes3,
+            R.drawable.diabetes2,
+            R.drawable.diabetes1
         )
 
         val adapter = ImageSliderAdapter(images)

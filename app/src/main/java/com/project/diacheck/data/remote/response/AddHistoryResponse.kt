@@ -15,5 +15,5 @@ data class CreateHistoryData(
     val bmi: Float,
     val hbA1c: Float,
     val blood_glucose: Float,
-    val result: Int
+    val result: Int?
 )

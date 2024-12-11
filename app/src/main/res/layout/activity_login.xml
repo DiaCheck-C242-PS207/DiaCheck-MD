@@ -118,39 +118,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/passwordTextView" />
 
-        <!-- or -->
-        <TextView
-            android:id="@+id/messageTextView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="sans-serif"
-            android:text="@string/or"
-            android:textColor="@color/orange"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/loginButton" />
-
-        <!-- Tombol Login Google -->
-        <Button
-            android:id="@+id/googleButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="30dp"
-            android:background="@drawable/shape_google"
-            android:text="@string/login_with_google"
-            android:textColor="@color/white"
-            android:drawableStart="@drawable/ic_google"
-            android:drawablePadding="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/messageTextView3" />
-
-
         <TextView
             android:id="@+id/notRegisteredText"
             android:layout_width="wrap_content"
@@ -162,7 +129,7 @@
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/googleButton" />
+            app:layout_constraintTop_toBottomOf="@id/loginButton" />
 
         <TextView
             android:id="@+id/createAccountText"
@@ -175,7 +142,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/notRegisteredText"
-            app:layout_constraintTop_toBottomOf="@id/googleButton" />
+            app:layout_constraintTop_toBottomOf="@id/loginButton" />
 
 
         <!-- Loading -->

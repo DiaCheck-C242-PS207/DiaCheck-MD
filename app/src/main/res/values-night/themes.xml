@@ -25,6 +25,11 @@
         <item name="itemTextColor">@color/orange</item>
     </style>
 
+    <style name="DeleteButtonStyle" parent="Widget.Material3.FloatingActionButton.Primary">
+        <item name="backgroundTint">@color/red</item>
+        <item name="iconTint">@color/white</item>
+    </style>
+
     <style name="ToolbarStyle" parent="Widget.Material3.Toolbar">
         <item name="android:background">@color/black_1</item>
     </style>

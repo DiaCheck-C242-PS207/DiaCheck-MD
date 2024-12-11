@@ -41,13 +41,10 @@ class LoginActivity : AppCompatActivity() {
         val title = ObjectAnimator.ofFloat(binding.messageTextView, View.ALPHA, 1f).setDuration(100)
         val message2 =
             ObjectAnimator.ofFloat(binding.messageTextView2, View.ALPHA, 1f).setDuration(100)
-        val message3 =
-            ObjectAnimator.ofFloat(binding.messageTextView3, View.ALPHA, 1f).setDuration(100)
         val message4 =
             ObjectAnimator.ofFloat(binding.notRegisteredText, View.ALPHA, 1f).setDuration(100)
         val message5 =
             ObjectAnimator.ofFloat(binding.createAccountText, View.ALPHA, 1f).setDuration(100)
-        val register = ObjectAnimator.ofFloat(binding.googleButton, View.ALPHA, 1f).setDuration(100)
         val login = ObjectAnimator.ofFloat(binding.loginButton, View.ALPHA, 1f).setDuration(100)
         val emailText =
             ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 1f).setDuration(100)
@@ -59,14 +56,13 @@ class LoginActivity : AppCompatActivity() {
             ObjectAnimator.ofFloat(binding.passwordEditTextLayout, View.ALPHA, 1f).setDuration(100)
 
         val together = AnimatorSet().apply {
-            playTogether(login, register)
+            playTogether(login)
         }
 
         AnimatorSet().apply {
             playSequentially(
                 title,
                 message2,
-                message3,
                 message4,
                 message5,
                 emailText,

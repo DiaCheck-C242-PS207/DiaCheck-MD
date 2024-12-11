@@ -18,6 +18,6 @@ interface NewsDao {
     @Query("SELECT * FROM articles")
     fun getNews(): LiveData<List<NewsEntity>>
 
-    @Query("SELECT * FROM articles WHERE id = :newsId")
+    @Query("SELECT * FROM articles WHERE id_article = :newsId")
     fun getNewsById(newsId: String): LiveData<NewsEntity>
 }

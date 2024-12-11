@@ -2,7 +2,6 @@ package com.project.diacheck.ui.form
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.diacheck.data.Result
-import com.project.diacheck.data.local.entity.HistoryEntity
 import com.project.diacheck.data.remote.response.ListFormItem
 import com.project.diacheck.databinding.FragmentFormBinding
 import com.project.diacheck.ui.ViewModelFactory
@@ -23,7 +21,10 @@ class FormFragment : Fragment() {
     private var _binding: FragmentFormBinding? = null
     private val binding get() = _binding!!
     private val formAdapter: FormAdapter by lazy {
-        FormAdapter { navigateToDetailForm(it) }
+        FormAdapter(
+            onItemClick = { form -> navigateToDetailForm(form) },
+            onDeleteClick = { form -> deleteHistory(form) }
+        )
     }
     private val formViewModel: FormViewModel by viewModels {
         ViewModelFactory.getInstance(
@@ -64,6 +65,14 @@ class FormFragment : Fragment() {
         }
     }
 
+    private fun deleteHistory(form: ListFormItem) {
+        formViewModel.deleteHistory(form.id_history)
+        formViewModel.getSession().observe(viewLifecycleOwner) { user ->
+            val userId = user.id_users
+            observerFormsByUserId(userId)
+        }
+    }
+
     private fun navigateToDetailForm(form: ListFormItem) {
         val intent = Intent(requireContext(), DetailActivity::class.java).apply {
             putExtra(DetailActivity.EXTRA_FORM_ID, form.id_history)
@@ -79,7 +88,6 @@ class FormFragment : Fragment() {
         }
         startActivity(intent)
     }
-
 
     private fun observerFormsByUserId(userId: Int) {
         formViewModel.findFormByUserId(userId)

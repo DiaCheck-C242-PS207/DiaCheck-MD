@@ -12,9 +12,11 @@ import com.project.diacheck.data.remote.request.RegisterRequest
 import com.project.diacheck.data.remote.response.LoginResponse
 import com.project.diacheck.data.remote.response.SignupResponse
 import com.project.diacheck.data.remote.response.UploadProfileResponse
+import com.project.diacheck.data.remote.response.UserData
 import com.project.diacheck.data.remote.retrofit.ApiService
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -89,30 +91,47 @@ class UserRepository private constructor(
         userPreference.logout()
     }
 
-    fun updateUser(
-        userId: Unit,
-        name: String,
-        imageFile: File
-    ): LiveData<Result<UploadProfileResponse>> = liveData {
-        emit(Result.Loading)
+    suspend fun updateUser(
+        userId: Int,
+        name: String?,
+        email: String?,
+        password: String?,
+        avatarFile: File?
+    ): UploadProfileResponse? {
+        val nameBody = name?.toRequestBody("text/plain".toMediaTypeOrNull())
+        val emailBody = email?.toRequestBody("text/plain".toMediaTypeOrNull())
+        val passwordBody = password?.toRequestBody("text/plain".toMediaTypeOrNull())
 
-        val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
-        val avatar = MultipartBody.Part.createFormData("avatar", imageFile.name, requestImageFile)
+        val avatarPart = avatarFile?.let {
+            MultipartBody.Part.createFormData(
+                "avatar",
+                it.name,
+                it.asRequestBody("image/jpeg".toMediaTypeOrNull())
+            )
+        }
 
-        val nameBody = name.toRequestBody("text/plain".toMediaType())
-
-        try {
-            val response = apiService.updateUser(userId, nameBody, avatar)
-            emit(Result.Success(response))
-        } catch (e: HttpException) {
-            Log.e("updateUser", "HTTP Exception: ${e.message}")
-            emit(Result.Error("HTTP Error: ${e.message()}"))
+        return try {
+            val response = apiService.updateUser(userId, avatarPart, nameBody, emailBody, passwordBody)
+            if (response.isSuccessful) response.body() else null
         } catch (e: Exception) {
-            Log.e("updateUser", "General Exception: ${e.message}")
-            emit(Result.Error("Error: ${e.message}"))
+            Log.e("UserRepository", "Error updating user: ${e.message}")
+            null
         }
     }
 
+    suspend fun getUserById(userId: Int): UserData? {
+        return try {
+            val response = apiService.getUserById(userId)
+            if (response.isSuccessful) {
+                response.body()?.data?.firstOrNull()
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            Log.e("UserRepository", "Error fetching user by ID: ${e.message}")
+            null
+        }
+    }
 
     companion object {
         @Volatile
