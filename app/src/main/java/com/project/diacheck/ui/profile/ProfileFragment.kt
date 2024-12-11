@@ -1,34 +1,32 @@
 package com.project.diacheck.ui.profile
 
-import android.net.Uri
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.project.diacheck.R
-import com.project.diacheck.databinding.FragmentProfileBinding
-import com.project.diacheck.reduceFileImage
-import com.project.diacheck.ui.ViewModelFactory
-import com.project.diacheck.uriToFile
 import com.project.diacheck.data.local.settings.ThemePreference
+import com.project.diacheck.databinding.FragmentProfileBinding
+import com.project.diacheck.ui.ViewModelFactory
+import com.project.diacheck.ui.worker.NotificationWorker
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import android.Manifest
-import android.content.Intent
-import android.content.pm.PackageManager
-import androidx.activity.result.ActivityResultLauncher
-import androidx.core.app.ActivityCompat
-import androidx.work.*
-import com.project.diacheck.ui.worker.NotificationWorker
 import java.util.concurrent.TimeUnit
 
 class ProfileFragment : Fragment() {
@@ -50,7 +48,11 @@ class ProfileFragment : Fragment() {
                 Toast.makeText(requireContext(), "Notifications enabled", Toast.LENGTH_SHORT).show()
             } else {
                 binding.switchNotifications.isChecked = false
-                Toast.makeText(requireContext(), "Notification permission denied", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Notification permission denied",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -113,8 +115,6 @@ class ProfileFragment : Fragment() {
                     .into(profileImageView)
             }
         }
-
-
 
         binding.editPhotoButton.setOnClickListener {
             startActivity(Intent(requireContext(), EditProfileActivity::class.java))

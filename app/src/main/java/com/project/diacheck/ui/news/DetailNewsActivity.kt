@@ -70,6 +70,7 @@ class DetailNewsActivity : AppCompatActivity() {
                         Toast.makeText(this, "News not found", Toast.LENGTH_SHORT).show()
                     }
                 }
+
                 is Result.Error -> {
                     showLoading(false)
                     Toast.makeText(this, "Error: ${result.error}", Toast.LENGTH_SHORT).show()

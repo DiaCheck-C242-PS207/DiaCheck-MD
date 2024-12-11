@@ -56,7 +56,7 @@ class FormViewModel(
             try {
                 formRepository.deleteHistory(id)
             } catch (e: Exception) {
-                // Tangani kesalahan
+
             }
         }
     }

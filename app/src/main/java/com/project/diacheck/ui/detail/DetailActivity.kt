@@ -2,18 +2,16 @@ package com.project.diacheck.ui.detail
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.card.MaterialCardView
 import com.project.diacheck.R
-import com.project.diacheck.data.Result
 import com.project.diacheck.databinding.ActivityDetailBinding
-import com.project.diacheck.ml.DiabetesClassifierHelper
 import com.project.diacheck.ui.ViewModelFactory
 import com.project.diacheck.ui.form.FormViewModel
-import com.google.android.material.card.MaterialCardView
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
@@ -36,8 +34,10 @@ class DetailActivity : AppCompatActivity() {
 
         binding.textViewInputAge.text = "Usia: $age tahun"
         binding.textViewInputGender.text = if (gender == 1) "Laki-laki" else "Perempuan"
-        binding.textViewInputHypertension.text = "Hipertensi: ${if (hypertension == 1) "Ya" else "Tidak"}"
-        binding.textViewInputHeartDisease.text = "Penyakit Jantung: ${if (heartdisease == 1) "Ya" else "Tidak"}"
+        binding.textViewInputHypertension.text =
+            "Hipertensi: ${if (hypertension == 1) "Ya" else "Tidak"}"
+        binding.textViewInputHeartDisease.text =
+            "Penyakit Jantung: ${if (heartdisease == 1) "Ya" else "Tidak"}"
         binding.textViewInputBMI.text = "BMI: $bmi"
         binding.textViewInputHbA1c.text = "HbA1c: $hbA1c"
         binding.textViewInputBloodGlucose.text = "Gula Darah: $bloodGlucose"
@@ -87,9 +87,11 @@ class DetailActivity : AppCompatActivity() {
         }
         toolbar.setNavigationOnClickListener {
             onBackPressed()
-        //            val intent = Intent(this, FormFragment::class.java)
-        //            startActivity(intent)
         }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.linearProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     companion object {

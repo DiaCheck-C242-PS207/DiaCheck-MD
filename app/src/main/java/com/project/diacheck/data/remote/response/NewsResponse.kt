@@ -2,7 +2,7 @@ package com.project.diacheck.data.remote.response
 
 data class NewsResponse(
     val message: String,
-    val data:  List<ListNewsItem>
+    val data: List<ListNewsItem>
 )
 
 data class ListNewsItem(

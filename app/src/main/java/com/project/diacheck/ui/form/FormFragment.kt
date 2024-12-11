@@ -98,6 +98,7 @@ class FormFragment : Fragment() {
                     showLoading(false)
                     updateFormList(result.data)
                 }
+
                 is Result.Error -> showError(result.error)
             }
         }
@@ -117,7 +118,6 @@ class FormFragment : Fragment() {
     private fun showError(error: String) {
         binding.linearProgressBar.visibility = View.GONE
         binding.tvNoEvent.visibility = View.VISIBLE
-        binding.tvNoEvent.text = error
     }
 
     private fun showLoading(isLoading: Boolean) {

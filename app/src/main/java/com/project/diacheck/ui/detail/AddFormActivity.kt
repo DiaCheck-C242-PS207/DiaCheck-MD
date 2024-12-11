@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.project.diacheck.R
-import com.project.diacheck.data.Result
 import com.project.diacheck.data.remote.request.CreateHistoryRequest
 import com.project.diacheck.data.remote.response.SubmitFormItem
 import com.project.diacheck.data.remote.retrofit.ApiML
@@ -24,7 +23,6 @@ import com.project.diacheck.ui.form.FormViewModel
 import com.project.diacheck.ui.profile.ProfileViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.io.IOException
 import java.net.SocketTimeoutException
 
 class AddFormActivity : AppCompatActivity() {
@@ -60,17 +58,8 @@ class AddFormActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch {
-            try {
-                profileViewModel.getUserSession().collectLatest { user ->
-                    userId = user.id_users
-                }
-            } catch (e: Exception) {
-                Log.e("AddFormActivity", "Failed to get userId: ${e.message}")
-                Toast.makeText(
-                    this@AddFormActivity,
-                    "Gagal mengambil informasi pengguna. Coba lagi.",
-                    Toast.LENGTH_LONG
-                ).show()
+            profileViewModel.getUserSession().collectLatest { user ->
+                userId = user.id_users
             }
         }
         val etAge: EditText = findViewById(R.id.etAge)
@@ -127,14 +116,29 @@ class AddFormActivity : AppCompatActivity() {
                         showLoading(true)
 
                         val response = ApiML.getApiML().predict(submitData)
+                        val probability = response.data?.probability ?: 0.0
+                        val formattedProbability = String.format("%.2f", probability)
+                        val historyMessage =
+                            "${response.data?.message} Dengan tingkat kemungkinan $formattedProbability%"
+                        val request = CreateHistoryRequest(
+                            id_users = userId!!,
+                            history = historyMessage,
+                            gender = gender,
+                            hypertension = hypertension,
+                            heart_disease = heartDisease,
+                            age = age,
+                            bmi = bmi,
+                            hbA1c = hbA1c,
+                            blood_glucose = bloodGlucose,
+                            result = response.data?.prediction ?: 0
+                        )
+
+                        viewModel.createHistory(request)
                         showLoading(false)
 
                         if (response.success == true) {
-                            val intent = Intent(this@AddFormActivity, DetailActivity::class.java)
                             val probability = response.data?.probability ?: 0.0
-                            val formattedProbability = String.format("%.2f", probability)
-                            val historyMessage = "${response.data?.message} Dengan tingkat kemungkinan $formattedProbability%"
-                            val prediction = response.data?.prediction ?: 0
+                            val intent = Intent(this@AddFormActivity, DetailActivity::class.java)
                             intent.putExtra("input_age", age)
                             intent.putExtra("input_gender", gender)
                             intent.putExtra("input_hypertension", hypertension)
@@ -142,24 +146,11 @@ class AddFormActivity : AppCompatActivity() {
                             intent.putExtra("input_bmi", bmi)
                             intent.putExtra("input_hbA1c", hbA1c)
                             intent.putExtra("input_bloodGlucose", bloodGlucose)
-                            intent.putExtra("prediction", prediction)
+                            intent.putExtra("prediction", response.data?.prediction)
                             intent.putExtra("prediction_message", historyMessage)
                             intent.putExtra("prediction_probability", probability)
 
-                            val request = CreateHistoryRequest(
-                                id_users = userId!!,
-                                history = historyMessage,
-                                gender = gender,
-                                hypertension = hypertension,
-                                heart_disease = heartDisease,
-                                age = age,
-                                bmi = bmi,
-                                hbA1c = hbA1c,
-                                blood_glucose = bloodGlucose,
-                                result = prediction
-                            )
 
-                            viewModel.createHistory(request)
                             startActivity(intent)
                         } else {
                             Log.e("AddFormActivity", "Request gagal: ${response.message}")
@@ -177,22 +168,6 @@ class AddFormActivity : AppCompatActivity() {
                             "Server terlalu lama merespons. Coba lagi nanti.",
                             Toast.LENGTH_LONG
                         ).show()
-                    } catch (e: IOException) {
-                        showLoading(false)
-                        Log.e("AddFormActivity", "Error jaringan: ${e.message}")
-                        Toast.makeText(
-                            this@AddFormActivity,
-                            "Terjadi masalah koneksi. Periksa jaringan Anda.",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    } catch (e: Exception) {
-                        showLoading(false)
-                        Log.e("AddFormActivity", "Error tidak terduga: ${e.message}", e)
-                        Toast.makeText(
-                            this@AddFormActivity,
-                            "Terjadi error: ${e.message}",
-                            Toast.LENGTH_LONG
-                        ).show()
                     }
                 }
 
@@ -204,20 +179,6 @@ class AddFormActivity : AppCompatActivity() {
                 ).show()
             }
         }
-        viewModel.createHistoryResult.observe(this) { result ->
-            when (result) {
-                is Result.Loading -> showLoading(true)
-                is Result.Success -> {
-                    showLoading(false)
-                    Toast.makeText(this, "History created successfully!", Toast.LENGTH_LONG).show()
-                }
-
-                is Result.Error -> {
-                    showLoading(false)
-                }
-            }
-        }
-
     }
 
     private fun showLoading(isLoading: Boolean) {

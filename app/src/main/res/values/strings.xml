@@ -13,10 +13,7 @@
     <string name="title_form">Form</string>
     <string name="title_news">News</string>
     <string name="title_profile">Profile</string>
-    <string name="toolbar">Theme</string>
     <string name="no_news_found">No latest news</string>
-    <string name="diacheck_error">Error</string>
-    <string name="web_client_id">586500541485-gsa1kqu733kdo73jrb5o802hkvpkj2jr.apps.googleusercontent.com</string>
 
     <!-- Profile -->
     <string name="theme">Dark Mode</string>
@@ -39,7 +36,6 @@
     <string name="hba1c_level">What is your HbA1c level (average blood sugar level over the past 2–3 months)?</string>
     <string name="blood_glucose_level">"What is your blood glucose level (current blood sugar level)?"</string>
     <string name="submit">Submit</string>
-    <string name="exit_app">Exit</string>
 
     <!-- History Form -->
     <string name="date">ddmmyyyy</string>
@@ -52,11 +48,9 @@
     <!-- Toolbar -->
     <string name="toolbar_title_right">Check</string>
     <string name="toolbar_title_left">Dia</string>
-    <string name="login_with_google">Login with Google</string>
     <string name="logo_diacheck">Logo DiaCheck</string>
     <string name="welcome">Welcome!</string>
     <string name="login">Login</string>
-    <string name="or">or</string>
     <string name="not_registered_yet">Not registered yet?</string>
     <string name="create_an_account">Create an account!</string>
     <string name="login_here">Login Here!</string>
@@ -75,5 +69,4 @@
     <string name="text_notification">Your health matters! Check your diabetes risk regularly</string>
     <string name="save">Save</string>
     <string name="cancel">Cancl</string>
-    <string name="time_news">time</string>
 </resources>

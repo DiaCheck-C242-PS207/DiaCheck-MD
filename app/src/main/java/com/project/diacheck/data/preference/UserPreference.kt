@@ -22,7 +22,7 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
             preferences[TOKEN_KEY] = user.token
             preferences[IS_LOGIN_KEY] = true
             preferences[ID_USERS_KEY] = user.id_users
-            preferences[AVATAR_KEY] = user.avatar?: ""
+            preferences[AVATAR_KEY] = user.avatar ?: ""
         }
     }
 

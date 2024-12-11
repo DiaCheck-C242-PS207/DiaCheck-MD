@@ -1,7 +1,6 @@
 package com.project.diacheck.ui.home
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -18,7 +17,6 @@ import com.project.diacheck.R
 import com.project.diacheck.databinding.FragmentHomeBinding
 import com.project.diacheck.ui.ViewModelFactory
 import com.project.diacheck.ui.adapter.ImageSliderAdapter
-import com.project.diacheck.ui.detail.AddFormActivity
 import com.project.diacheck.ui.profile.ProfileViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -84,7 +82,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupChecklistListeners() {
-        val sharedPrefs = requireContext().getSharedPreferences("daily_checklist_prefs", Context.MODE_PRIVATE)
+        val sharedPrefs =
+            requireContext().getSharedPreferences("daily_checklist_prefs", Context.MODE_PRIVATE)
         val editor = sharedPrefs.edit()
 
         val checkWater = binding.checkWater
@@ -122,7 +121,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun resetChecklistIfNewDay() {
-        val sharedPrefs = requireContext().getSharedPreferences("daily_checklist_prefs", Context.MODE_PRIVATE)
+        val sharedPrefs =
+            requireContext().getSharedPreferences("daily_checklist_prefs", Context.MODE_PRIVATE)
 
         if (isNewDay(requireContext())) {
             sharedPrefs.edit().apply {

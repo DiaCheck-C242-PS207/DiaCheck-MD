@@ -120,8 +120,4 @@ class SignupActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-
-    companion object {
-        private const val TAG = "SignupActivity"
-    }
 }

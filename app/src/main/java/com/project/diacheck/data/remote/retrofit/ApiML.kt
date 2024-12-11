@@ -15,7 +15,7 @@ object ApiML {
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
-            .retryOnConnectionFailure(true) // Mengaktifkan retry otomatis
+            .retryOnConnectionFailure(true)
             .build()
 
         val retrofit = Retrofit.Builder()

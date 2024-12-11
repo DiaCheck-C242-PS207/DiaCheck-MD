@@ -1,7 +1,6 @@
 package com.project.diacheck.di
 
 import android.content.Context
-import com.project.diacheck.data.local.room.DiacheckDatabase
 import com.project.diacheck.data.preference.UserPreference
 import com.project.diacheck.data.preference.dataStore
 import com.project.diacheck.data.remote.repository.FormRepository

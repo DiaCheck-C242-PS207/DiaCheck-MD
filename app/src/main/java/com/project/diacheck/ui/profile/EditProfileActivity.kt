@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.imageview.ShapeableImageView
 import com.project.diacheck.R
 import com.project.diacheck.databinding.ActivityEditProfileBinding
 import com.project.diacheck.getImageUri
@@ -90,7 +89,10 @@ class EditProfileActivity : AppCompatActivity() {
                 val updatedName = if (nameChanged) nameInput else null
                 val updatedImageUri = if (imageUriChanged) viewModel.currentImageUri.value else null
 
-                Log.d("EditProfile", "Updating user with id: $userId, name: $updatedName, uri: $updatedImageUri")
+                Log.d(
+                    "EditProfile",
+                    "Updating user with id: $userId, name: $updatedName, uri: $updatedImageUri"
+                )
 
                 viewModel.updateUser(
                     userId,

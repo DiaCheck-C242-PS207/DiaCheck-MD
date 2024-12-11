@@ -71,6 +71,7 @@ class NewsFragment : Fragment() {
                     showLoading(false)
                     result.data?.let { newsAdapter.submitSingleItem(it) } ?: showError()
                 }
+
                 is Result.Error -> {
                     showLoading(false)
                     showError()
@@ -107,6 +108,7 @@ class NewsFragment : Fragment() {
                     showLoading(false)
                     result.data.let { newsAdapter.submitList(it) } ?: showError()
                 }
+
                 is Result.Error -> {
                     showLoading(false)
                     showError()

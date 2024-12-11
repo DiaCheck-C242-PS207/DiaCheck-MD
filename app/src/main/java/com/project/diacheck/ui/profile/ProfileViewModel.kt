@@ -2,9 +2,9 @@ package com.project.diacheck.ui.profile
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.project.diacheck.data.preference.UserModel
 import com.project.diacheck.data.remote.repository.UserRepository
@@ -14,8 +14,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import androidx.lifecycle.asLiveData
-import java.io.File
 
 class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
     private var _currentImageUri = MutableLiveData<Uri?>()
@@ -39,6 +37,7 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
     fun getUserSession(): Flow<UserModel> {
         return repository.getSession()
     }
+
     fun logout() {
         viewModelScope.launch {
             repository.logout()

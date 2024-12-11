@@ -5,8 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.text.HtmlCompat
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.project.diacheck.R
@@ -70,7 +68,8 @@ class NewsAdapter(
                 .error(R.drawable.ic_error)
                 .into(binding.ivItemImage)
             binding.tvItemName.text = news.title
-            binding.ivItemDescription.text = HtmlCompat.fromHtml(news.body, HtmlCompat.FROM_HTML_MODE_LEGACY)
+            binding.ivItemDescription.text =
+                HtmlCompat.fromHtml(news.body, HtmlCompat.FROM_HTML_MODE_LEGACY)
 
             itemView.setOnClickListener {
                 onItemClick(news)

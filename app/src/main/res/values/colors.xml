@@ -8,13 +8,10 @@
     <color name="gray">#ACACAC</color>
     <color name="black_1">#1A1927</color>
     <color name="gray_1">#F0F0F0</color>
-    <color name="textLight">#202429</color>
     <color name="textNight">#E6DFE5</color>
-    <color name="yellow">#F4970D</color>
     <color name="selected_color">#EF4138</color>
     <color name="unselected_color">#FE5E49</color>
     <color name="dot_selected_color">#EF4138</color>
-    <color name="dot_unselected_color">#FE5E49</color>
     <color name="light_green">#A1EEBD</color>
     <color name="light_yellow">#FEFFA7</color>
     <color name="light_red">#ff4a3d</color>

@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.project.diacheck.data.local.entity.HistoryEntity
 import com.project.diacheck.data.remote.response.ListFormItem
 import com.project.diacheck.databinding.ItemCardBinding
 import java.text.SimpleDateFormat
@@ -43,7 +42,8 @@ class FormAdapter(
 
         fun formatDate(inputDate: String): String {
             return try {
-                val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+                val inputFormat =
+                    SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
                 val outputFormat = SimpleDateFormat("d MMMM yyyy, HH:mm", Locale.getDefault())
                 val date = inputFormat.parse(inputDate)
                 outputFormat.format(date ?: "")
