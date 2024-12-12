@@ -7,7 +7,7 @@ class NewsViewModel(private val repository: NewsRepository) : ViewModel() {
 
     fun findNews() = repository.getNews()
 
-    fun searchNews(query: String) = repository.searchNews(query)
+    suspend fun searchNews(query: String) = repository.searchNews(query)
 
     fun getNewsById(newsId: Int) = repository.getDetailNews(newsId)
 

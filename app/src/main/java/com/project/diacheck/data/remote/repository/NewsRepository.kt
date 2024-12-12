@@ -1,6 +1,7 @@
 package com.project.diacheck.data.remote.repository
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.liveData
 import com.project.diacheck.data.Result
 import com.project.diacheck.data.remote.response.ListNewsItem
@@ -21,14 +22,23 @@ class NewsRepository private constructor(
         }
     }
 
-    fun searchNews(query: String): LiveData<Result<News>> = liveData {
-        emit(Result.Loading)
-        try {
-            val response = apiService.searchNews(query)
-            emit(Result.Success(response.data))
-        } catch (e: Exception) {
-            emit(Result.Error(e.message.toString()))
+    suspend fun searchNews(query: String): LiveData<Result<List<ListNewsItem>>> {
+        val result = MediatorLiveData<Result<List<ListNewsItem>>>()
+        result.value = Result.Loading
+
+        if (query.isEmpty()) {
+            result.value = Result.Error("Query cannot be empty")
+        } else {
+            try {
+                val response = apiService.searchNews(query)
+                result.value = Result.Success(response.data)
+            } catch (e: Exception) {
+                result.value = Result.Error(e.message ?: "Unknown error")
+            }
+
         }
+
+        return result
     }
 
     fun getDetailNews(newsId: Int): LiveData<Result<News>> = liveData {

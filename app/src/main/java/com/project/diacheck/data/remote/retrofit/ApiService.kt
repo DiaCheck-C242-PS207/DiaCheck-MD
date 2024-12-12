@@ -43,7 +43,7 @@ interface ApiService {
     suspend fun getDetailNews(@Path("id_article") newsId: Int): DetailNewsResponse
 
     @GET("articles/{title}")
-    suspend fun searchNews(@Path("title") title: String): DetailNewsResponse
+    suspend fun searchNews(@Path("title") title: String): NewsResponse
 
     @Multipart
     @PUT("users/update/{id}")

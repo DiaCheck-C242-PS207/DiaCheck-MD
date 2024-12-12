@@ -37,24 +37,6 @@ class NewsAdapter(
         notifyDataSetChanged()
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun submitSingleItem(news: News) {
-        Log.d("NewsAdapter", "submitSingleItem: ${news.title}")
-        items.clear()
-        items.add(
-            ListNewsItem(
-                id_article = news.id_article,
-                id_users = news.id_users,
-                thumbnail = news.thumbnail,
-                title = news.title,
-                body = news.body,
-                created_at = news.created_at,
-                updated_at = news.updated_at
-            )
-        )
-        notifyDataSetChanged()
-    }
-
 
     class NewsViewHolder(
         private val binding: ItemNewsBinding,
