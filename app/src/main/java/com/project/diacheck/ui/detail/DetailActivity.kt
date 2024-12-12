@@ -50,9 +50,9 @@ class DetailActivity : AppCompatActivity() {
         val textViewMessage = findViewById<TextView>(R.id.textViewMessage)
         val cardPrediction = findViewById<MaterialCardView>(R.id.cardPrediction)
 
-        val predictionResult = if (prediction == 1) {
+        val predictionResult = if (prediction == 2) {
             "Terdeteksi diabetes"
-        } else if (prediction == 0) {
+        } else if (prediction == 1) {
             "Tidak terdeteksi diabetes"
         } else {
             "Hasil tidak valid"

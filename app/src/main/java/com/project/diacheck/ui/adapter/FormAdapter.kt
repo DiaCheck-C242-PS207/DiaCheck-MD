@@ -10,6 +10,7 @@ import com.project.diacheck.data.remote.response.ListFormItem
 import com.project.diacheck.databinding.ItemCardBinding
 import java.text.SimpleDateFormat
 import java.util.Locale
+import java.util.TimeZone
 
 class FormAdapter(
     private val onItemClick: (ListFormItem) -> Unit,
@@ -44,11 +45,15 @@ class FormAdapter(
             return try {
                 val inputFormat =
                     SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+                inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+
                 val outputFormat = SimpleDateFormat("d MMMM yyyy, HH:mm", Locale.getDefault())
+                outputFormat.timeZone = TimeZone.getDefault()
+
                 val date = inputFormat.parse(inputDate)
-                outputFormat.format(date ?: "")
+                date?.let { outputFormat.format(it) } ?: "Invalid date"
             } catch (e: Exception) {
-                inputDate
+                "Error formatting date: ${e.message}"
             }
         }
     }

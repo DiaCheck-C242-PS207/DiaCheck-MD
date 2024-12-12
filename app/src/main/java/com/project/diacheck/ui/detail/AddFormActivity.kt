@@ -27,6 +27,7 @@ import java.net.SocketTimeoutException
 
 class AddFormActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddFormBinding
+    private var result: Int? = 0
     private val viewModel by viewModels<FormViewModel> {
         ViewModelFactory.getInstance(this)
     }
@@ -120,6 +121,7 @@ class AddFormActivity : AppCompatActivity() {
                         val formattedProbability = String.format("%.2f", probability)
                         val historyMessage =
                             "${response.data?.message} Dengan tingkat kemungkinan $formattedProbability%"
+                        result = response.data!!.prediction!! + 1
                         val request = CreateHistoryRequest(
                             id_users = userId!!,
                             history = historyMessage,
@@ -130,9 +132,8 @@ class AddFormActivity : AppCompatActivity() {
                             bmi = bmi,
                             hbA1c = hbA1c,
                             blood_glucose = bloodGlucose,
-                            result = response.data?.prediction ?: 0
+                            result = result!!
                         )
-
                         viewModel.createHistory(request)
                         showLoading(false)
 
@@ -146,7 +147,7 @@ class AddFormActivity : AppCompatActivity() {
                             intent.putExtra("input_bmi", bmi)
                             intent.putExtra("input_hbA1c", hbA1c)
                             intent.putExtra("input_bloodGlucose", bloodGlucose)
-                            intent.putExtra("prediction", response.data?.prediction)
+                            intent.putExtra("prediction", result)
                             intent.putExtra("prediction_message", historyMessage)
                             intent.putExtra("prediction_probability", probability)
 
